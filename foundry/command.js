@@ -9,4 +9,5 @@ var c = "forge create src/MockERC20.sol:MockERC20 --rpc-url https://eth-sepolia.
 const erc720address = "0xEC1fbD2a33b3a6be983e0209dA7e14b28454575c";
 
 const command_deploy_auction = 
-"forge create src/TokenizedVickeryAuction.sol:TokenizedVickeryAuction --rpc-url https://eth-sepolia.g.alchemy.com/v2/j5bhtQsduhrpb070R13WUvU0aBX2Y-Wl --private-key a59e8f9d8d52750eab1cb8e66bce676600ddb8d89eabdd818af1c2b8d82b0a47"
+"forge create src/WagmitPet.sol:Wagmipet --rpc-url https://eth-sepolia.g.alchemy.com/v2/nZ_BUOB0QRFF1VXy0A6Gj0kBJi7znXwP --private-key a59e8f9d8d52750eab1cb8e66bce676600ddb8d89eabdd818af1c2b8d82b0a47 --etherscan-api-key 4PDHGGUZ1UGCHPZXMFP7P4X2MHGTBBI2Q3 \
+--verify"

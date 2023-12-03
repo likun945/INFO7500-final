@@ -2062,7 +2062,29 @@ export const tokenizedVickeryAuctionABI = [
     type: 'function',
     inputs: [],
     name: 'getAllAuctions',
-    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+    outputs: [
+      {
+        name: '',
+        internalType: 'struct TokenizedVickeryAuction.Auction[]',
+        type: 'tuple[]',
+        components: [
+          { name: 'seller', internalType: 'address', type: 'address' },
+          { name: 'startTime', internalType: 'uint32', type: 'uint32' },
+          {
+            name: 'endOfBiddingPeriod',
+            internalType: 'uint32',
+            type: 'uint32',
+          },
+          { name: 'endOfRevealPeriod', internalType: 'uint32', type: 'uint32' },
+          { name: 'numUnrevealedBids', internalType: 'uint64', type: 'uint64' },
+          { name: 'highestBid', internalType: 'uint96', type: 'uint96' },
+          { name: 'secondHighestBid', internalType: 'uint96', type: 'uint96' },
+          { name: 'highestBidder', internalType: 'address', type: 'address' },
+          { name: 'index', internalType: 'uint64', type: 'uint64' },
+          { name: 'erc20Token', internalType: 'address', type: 'address' },
+        ],
+      },
+    ],
   },
   {
     stateMutability: 'view',

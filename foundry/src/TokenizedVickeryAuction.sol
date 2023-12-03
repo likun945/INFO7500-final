@@ -319,15 +319,14 @@ contract TokenizedVickeryAuction {
         return auction;
     }
 
-    function getAllAuctions() public view returns (bool) {
-        // Auction[] memory allAuctions = new Auction[](auctionKeys.length);
-        // for (uint256 i = 0; i < auctionKeys.length; i++) {
-        //     AuctionKey memory key = auctionKeys[i];
-        //     allAuctions[i] = auctions[key.tokenContract][key.tokenId];
-        // }
-        return true;
+    function getAllAuctions() public view returns (Auction[] memory) {
+        Auction[] memory allAuctions = new Auction[](auctionKeys.length);
+        for (uint256 i = 0; i < auctionKeys.length; i++) {
+            AuctionKey memory key = auctionKeys[i];
+            allAuctions[i] = auctions[key.tokenContract][key.tokenId];
+        }
+        return allAuctions;
     }
-
     function getBid(
         address tokenContract,
         uint256 tokenId,

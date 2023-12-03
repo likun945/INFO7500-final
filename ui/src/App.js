@@ -7,10 +7,11 @@ import Home from './pages/home'
 import Network from './pages/network';
 import Profile from './pages/Profile';
 import Mint from './pages/mint';
+import AuctionList from './pages/auctionList';
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
-  [mainnet],
+  [sepolia],
   [alchemyProvider({ apiKey: 'Ar08CeP55EpgbRw1Osj_41IpKQr-PO_J' }), publicProvider()],
 )
 
@@ -31,6 +32,7 @@ function App() {
         <Profile></Profile>
         <Home></Home>
         <Network />
+        <AuctionList />
       </div>
     </WagmiConfig>
   );
