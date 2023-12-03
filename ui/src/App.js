@@ -1,13 +1,10 @@
 import React from 'react';
-import './App.css';
+import { Route, Link, BrowserRouter, Routes } from 'react-router-dom'
 import { WagmiConfig, createConfig, configureChains, mainnet, sepolia } from 'wagmi';
 import { alchemyProvider } from 'wagmi/providers/alchemy';
-import { publicProvider } from 'wagmi/providers/public'
-import Home from './pages/home'
-import Network from './pages/network';
-import Profile from './pages/Profile';
+import { publicProvider } from 'wagmi/providers/public';
+import Home from './pages/home';
 import Mint from './pages/mint';
-import AuctionList from './pages/auctionList';
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
@@ -29,10 +26,14 @@ function App() {
   return (
     <WagmiConfig config={config}>
       <div className="App">
-        <Profile></Profile>
-        <Home></Home>
-        <Network />
-        <AuctionList />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Home />}></Route>
+            <Route path="/mint-nft" element={<Mint />}></Route>
+            <Route path="/mint-erc20" element={<Mint />}></Route>
+            <Route path="/auction" element={<Mint />}></Route>
+          </Routes>
+        </BrowserRouter>
       </div>
     </WagmiConfig>
   );

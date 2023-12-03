@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Table, Button, Badge } from 'antd';
 import { useContractRead } from 'wagmi'
 import { tokenizedVickeryAuctionABI } from '../../generated';
-import { address_map } from '../../../src/constants'
+import { address_map } from '../../constants'
 
 export default function () {
     const [tableData, setTableData] = useState()
@@ -93,6 +93,9 @@ export default function () {
         isRefetching: true,
         staleTime: 2000,
         onSuccess(data) {
+            if(!data) {
+                return;
+            }
             const formattedData = data.map((auction, index) => {
                 const highestBid = Number(auction.highestBid);
                 const indexNumber = Number(auction.index);

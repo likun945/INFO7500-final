@@ -2,6 +2,8 @@ import React, { useEffect } from 'react';
 import { useContractWrite, useContractRead } from 'wagmi'
 import { tokenizedVickeryAuctionABI, mockErc721ABI } from '../../generated';
 import Mint from '../mint';
+import AuctionList from '../../components/auctionList';
+import NavBar from '../../components/navBar';
 
 export default function () {
     const auction_address = "0x507Fb449addCCa4aC89a838d1B5f134425d63124";
@@ -42,13 +44,14 @@ export default function () {
     }
     return (
         <div>
-            <Mint />
-            <button onClick={handleApprove}>Approve</button>
+            {/* <Mint /> */}
+            {/* <button onClick={handleApprove}>Approve</button>
             <button onClick={handleClick}>Create Auction</button>
             <button onClick={handleViewAuction}>View Auction</button>
-            {isLoading && <div>Check Wallet</div>}
+            {isLoading && <div>Check Wallet</div>} */}
+            <NavBar clickApprove={handleApprove} />
+            <AuctionList/>
             {/* {isSuccess && <div>Transaction: {JSON.stringify(data)}</div>} */}
-
         </div>
     )
 }
