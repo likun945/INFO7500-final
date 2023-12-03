@@ -2060,6 +2060,13 @@ export const tokenizedVickeryAuctionABI = [
   {
     stateMutability: 'view',
     type: 'function',
+    inputs: [],
+    name: 'getAllAuctions',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
     inputs: [
       { name: 'tokenContract', internalType: 'address', type: 'address' },
       { name: 'tokenId', internalType: 'uint256', type: 'uint256' },
@@ -2284,6 +2291,13 @@ export const tokenizedVickeryAuctionV2ABI = [
     ],
     name: 'endAuction',
     outputs: [],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'getAllAuctions',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
   },
   {
     stateMutability: 'view',
@@ -2624,6 +2638,110 @@ export const vickreyAuctionABI = [
       { name: 'auctionIndex', internalType: 'uint64', type: 'uint64' },
     ],
     name: 'withdrawCollateral',
+    outputs: [],
+  },
+] as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Wagmipet
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const wagmipetABI = [
+  { stateMutability: 'nonpayable', type: 'constructor', inputs: [] },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'caretaker',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'amount',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+    ],
+    name: 'CaretakerLoved',
+  },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [],
+    name: 'clean',
+    outputs: [],
+  },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [],
+    name: 'feed',
+    outputs: [],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'getAlive',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'getBoredom',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'getHunger',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'getSleepiness',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'getStatus',
+    outputs: [{ name: '', internalType: 'string', type: 'string' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'getUncleanliness',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [{ name: '', internalType: 'address', type: 'address' }],
+    name: 'love',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+  },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [],
+    name: 'play',
+    outputs: [],
+  },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [],
+    name: 'sleep',
     outputs: [],
   },
 ] as const
@@ -8024,6 +8142,36 @@ export function useTokenizedVickeryAuctionBids<
 }
 
 /**
+ * Wraps __{@link useContractRead}__ with `abi` set to __{@link tokenizedVickeryAuctionABI}__ and `functionName` set to `"getAllAuctions"`.
+ */
+export function useTokenizedVickeryAuctionGetAllAuctions<
+  TFunctionName extends 'getAllAuctions',
+  TSelectData = ReadContractResult<
+    typeof tokenizedVickeryAuctionABI,
+    TFunctionName
+  >,
+>(
+  config: Omit<
+    UseContractReadConfig<
+      typeof tokenizedVickeryAuctionABI,
+      TFunctionName,
+      TSelectData
+    >,
+    'abi' | 'functionName'
+  > = {} as any,
+) {
+  return useContractRead({
+    abi: tokenizedVickeryAuctionABI,
+    functionName: 'getAllAuctions',
+    ...config,
+  } as UseContractReadConfig<
+    typeof tokenizedVickeryAuctionABI,
+    TFunctionName,
+    TSelectData
+  >)
+}
+
+/**
  * Wraps __{@link useContractRead}__ with `abi` set to __{@link tokenizedVickeryAuctionABI}__ and `functionName` set to `"getAuction"`.
  */
 export function useTokenizedVickeryAuctionGetAuction<
@@ -8624,6 +8772,36 @@ export function useTokenizedVickeryAuctionV2BlacklistedSellers<
   return useContractRead({
     abi: tokenizedVickeryAuctionV2ABI,
     functionName: 'blacklistedSellers',
+    ...config,
+  } as UseContractReadConfig<
+    typeof tokenizedVickeryAuctionV2ABI,
+    TFunctionName,
+    TSelectData
+  >)
+}
+
+/**
+ * Wraps __{@link useContractRead}__ with `abi` set to __{@link tokenizedVickeryAuctionV2ABI}__ and `functionName` set to `"getAllAuctions"`.
+ */
+export function useTokenizedVickeryAuctionV2GetAllAuctions<
+  TFunctionName extends 'getAllAuctions',
+  TSelectData = ReadContractResult<
+    typeof tokenizedVickeryAuctionV2ABI,
+    TFunctionName
+  >,
+>(
+  config: Omit<
+    UseContractReadConfig<
+      typeof tokenizedVickeryAuctionV2ABI,
+      TFunctionName,
+      TSelectData
+    >,
+    'abi' | 'functionName'
+  > = {} as any,
+) {
+  return useContractRead({
+    abi: tokenizedVickeryAuctionV2ABI,
+    functionName: 'getAllAuctions',
     ...config,
   } as UseContractReadConfig<
     typeof tokenizedVickeryAuctionV2ABI,
@@ -10117,4 +10295,391 @@ export function useVickreyAuctionAssetTransferredEvent(
     eventName: 'AssetTransferred',
     ...config,
   } as UseContractEventConfig<typeof vickreyAuctionABI, 'AssetTransferred'>)
+}
+
+/**
+ * Wraps __{@link useContractRead}__ with `abi` set to __{@link wagmipetABI}__.
+ */
+export function useWagmipetRead<
+  TFunctionName extends string,
+  TSelectData = ReadContractResult<typeof wagmipetABI, TFunctionName>,
+>(
+  config: Omit<
+    UseContractReadConfig<typeof wagmipetABI, TFunctionName, TSelectData>,
+    'abi'
+  > = {} as any,
+) {
+  return useContractRead({
+    abi: wagmipetABI,
+    ...config,
+  } as UseContractReadConfig<typeof wagmipetABI, TFunctionName, TSelectData>)
+}
+
+/**
+ * Wraps __{@link useContractRead}__ with `abi` set to __{@link wagmipetABI}__ and `functionName` set to `"getAlive"`.
+ */
+export function useWagmipetGetAlive<
+  TFunctionName extends 'getAlive',
+  TSelectData = ReadContractResult<typeof wagmipetABI, TFunctionName>,
+>(
+  config: Omit<
+    UseContractReadConfig<typeof wagmipetABI, TFunctionName, TSelectData>,
+    'abi' | 'functionName'
+  > = {} as any,
+) {
+  return useContractRead({
+    abi: wagmipetABI,
+    functionName: 'getAlive',
+    ...config,
+  } as UseContractReadConfig<typeof wagmipetABI, TFunctionName, TSelectData>)
+}
+
+/**
+ * Wraps __{@link useContractRead}__ with `abi` set to __{@link wagmipetABI}__ and `functionName` set to `"getBoredom"`.
+ */
+export function useWagmipetGetBoredom<
+  TFunctionName extends 'getBoredom',
+  TSelectData = ReadContractResult<typeof wagmipetABI, TFunctionName>,
+>(
+  config: Omit<
+    UseContractReadConfig<typeof wagmipetABI, TFunctionName, TSelectData>,
+    'abi' | 'functionName'
+  > = {} as any,
+) {
+  return useContractRead({
+    abi: wagmipetABI,
+    functionName: 'getBoredom',
+    ...config,
+  } as UseContractReadConfig<typeof wagmipetABI, TFunctionName, TSelectData>)
+}
+
+/**
+ * Wraps __{@link useContractRead}__ with `abi` set to __{@link wagmipetABI}__ and `functionName` set to `"getHunger"`.
+ */
+export function useWagmipetGetHunger<
+  TFunctionName extends 'getHunger',
+  TSelectData = ReadContractResult<typeof wagmipetABI, TFunctionName>,
+>(
+  config: Omit<
+    UseContractReadConfig<typeof wagmipetABI, TFunctionName, TSelectData>,
+    'abi' | 'functionName'
+  > = {} as any,
+) {
+  return useContractRead({
+    abi: wagmipetABI,
+    functionName: 'getHunger',
+    ...config,
+  } as UseContractReadConfig<typeof wagmipetABI, TFunctionName, TSelectData>)
+}
+
+/**
+ * Wraps __{@link useContractRead}__ with `abi` set to __{@link wagmipetABI}__ and `functionName` set to `"getSleepiness"`.
+ */
+export function useWagmipetGetSleepiness<
+  TFunctionName extends 'getSleepiness',
+  TSelectData = ReadContractResult<typeof wagmipetABI, TFunctionName>,
+>(
+  config: Omit<
+    UseContractReadConfig<typeof wagmipetABI, TFunctionName, TSelectData>,
+    'abi' | 'functionName'
+  > = {} as any,
+) {
+  return useContractRead({
+    abi: wagmipetABI,
+    functionName: 'getSleepiness',
+    ...config,
+  } as UseContractReadConfig<typeof wagmipetABI, TFunctionName, TSelectData>)
+}
+
+/**
+ * Wraps __{@link useContractRead}__ with `abi` set to __{@link wagmipetABI}__ and `functionName` set to `"getStatus"`.
+ */
+export function useWagmipetGetStatus<
+  TFunctionName extends 'getStatus',
+  TSelectData = ReadContractResult<typeof wagmipetABI, TFunctionName>,
+>(
+  config: Omit<
+    UseContractReadConfig<typeof wagmipetABI, TFunctionName, TSelectData>,
+    'abi' | 'functionName'
+  > = {} as any,
+) {
+  return useContractRead({
+    abi: wagmipetABI,
+    functionName: 'getStatus',
+    ...config,
+  } as UseContractReadConfig<typeof wagmipetABI, TFunctionName, TSelectData>)
+}
+
+/**
+ * Wraps __{@link useContractRead}__ with `abi` set to __{@link wagmipetABI}__ and `functionName` set to `"getUncleanliness"`.
+ */
+export function useWagmipetGetUncleanliness<
+  TFunctionName extends 'getUncleanliness',
+  TSelectData = ReadContractResult<typeof wagmipetABI, TFunctionName>,
+>(
+  config: Omit<
+    UseContractReadConfig<typeof wagmipetABI, TFunctionName, TSelectData>,
+    'abi' | 'functionName'
+  > = {} as any,
+) {
+  return useContractRead({
+    abi: wagmipetABI,
+    functionName: 'getUncleanliness',
+    ...config,
+  } as UseContractReadConfig<typeof wagmipetABI, TFunctionName, TSelectData>)
+}
+
+/**
+ * Wraps __{@link useContractRead}__ with `abi` set to __{@link wagmipetABI}__ and `functionName` set to `"love"`.
+ */
+export function useWagmipetLove<
+  TFunctionName extends 'love',
+  TSelectData = ReadContractResult<typeof wagmipetABI, TFunctionName>,
+>(
+  config: Omit<
+    UseContractReadConfig<typeof wagmipetABI, TFunctionName, TSelectData>,
+    'abi' | 'functionName'
+  > = {} as any,
+) {
+  return useContractRead({
+    abi: wagmipetABI,
+    functionName: 'love',
+    ...config,
+  } as UseContractReadConfig<typeof wagmipetABI, TFunctionName, TSelectData>)
+}
+
+/**
+ * Wraps __{@link useContractWrite}__ with `abi` set to __{@link wagmipetABI}__.
+ */
+export function useWagmipetWrite<
+  TFunctionName extends string,
+  TMode extends WriteContractMode = undefined,
+>(
+  config: TMode extends 'prepared'
+    ? UseContractWriteConfig<
+        PrepareWriteContractResult<
+          typeof wagmipetABI,
+          string
+        >['request']['abi'],
+        TFunctionName,
+        TMode
+      >
+    : UseContractWriteConfig<typeof wagmipetABI, TFunctionName, TMode> & {
+        abi?: never
+      } = {} as any,
+) {
+  return useContractWrite<typeof wagmipetABI, TFunctionName, TMode>({
+    abi: wagmipetABI,
+    ...config,
+  } as any)
+}
+
+/**
+ * Wraps __{@link useContractWrite}__ with `abi` set to __{@link wagmipetABI}__ and `functionName` set to `"clean"`.
+ */
+export function useWagmipetClean<TMode extends WriteContractMode = undefined>(
+  config: TMode extends 'prepared'
+    ? UseContractWriteConfig<
+        PrepareWriteContractResult<
+          typeof wagmipetABI,
+          'clean'
+        >['request']['abi'],
+        'clean',
+        TMode
+      > & { functionName?: 'clean' }
+    : UseContractWriteConfig<typeof wagmipetABI, 'clean', TMode> & {
+        abi?: never
+        functionName?: 'clean'
+      } = {} as any,
+) {
+  return useContractWrite<typeof wagmipetABI, 'clean', TMode>({
+    abi: wagmipetABI,
+    functionName: 'clean',
+    ...config,
+  } as any)
+}
+
+/**
+ * Wraps __{@link useContractWrite}__ with `abi` set to __{@link wagmipetABI}__ and `functionName` set to `"feed"`.
+ */
+export function useWagmipetFeed<TMode extends WriteContractMode = undefined>(
+  config: TMode extends 'prepared'
+    ? UseContractWriteConfig<
+        PrepareWriteContractResult<
+          typeof wagmipetABI,
+          'feed'
+        >['request']['abi'],
+        'feed',
+        TMode
+      > & { functionName?: 'feed' }
+    : UseContractWriteConfig<typeof wagmipetABI, 'feed', TMode> & {
+        abi?: never
+        functionName?: 'feed'
+      } = {} as any,
+) {
+  return useContractWrite<typeof wagmipetABI, 'feed', TMode>({
+    abi: wagmipetABI,
+    functionName: 'feed',
+    ...config,
+  } as any)
+}
+
+/**
+ * Wraps __{@link useContractWrite}__ with `abi` set to __{@link wagmipetABI}__ and `functionName` set to `"play"`.
+ */
+export function useWagmipetPlay<TMode extends WriteContractMode = undefined>(
+  config: TMode extends 'prepared'
+    ? UseContractWriteConfig<
+        PrepareWriteContractResult<
+          typeof wagmipetABI,
+          'play'
+        >['request']['abi'],
+        'play',
+        TMode
+      > & { functionName?: 'play' }
+    : UseContractWriteConfig<typeof wagmipetABI, 'play', TMode> & {
+        abi?: never
+        functionName?: 'play'
+      } = {} as any,
+) {
+  return useContractWrite<typeof wagmipetABI, 'play', TMode>({
+    abi: wagmipetABI,
+    functionName: 'play',
+    ...config,
+  } as any)
+}
+
+/**
+ * Wraps __{@link useContractWrite}__ with `abi` set to __{@link wagmipetABI}__ and `functionName` set to `"sleep"`.
+ */
+export function useWagmipetSleep<TMode extends WriteContractMode = undefined>(
+  config: TMode extends 'prepared'
+    ? UseContractWriteConfig<
+        PrepareWriteContractResult<
+          typeof wagmipetABI,
+          'sleep'
+        >['request']['abi'],
+        'sleep',
+        TMode
+      > & { functionName?: 'sleep' }
+    : UseContractWriteConfig<typeof wagmipetABI, 'sleep', TMode> & {
+        abi?: never
+        functionName?: 'sleep'
+      } = {} as any,
+) {
+  return useContractWrite<typeof wagmipetABI, 'sleep', TMode>({
+    abi: wagmipetABI,
+    functionName: 'sleep',
+    ...config,
+  } as any)
+}
+
+/**
+ * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link wagmipetABI}__.
+ */
+export function usePrepareWagmipetWrite<TFunctionName extends string>(
+  config: Omit<
+    UsePrepareContractWriteConfig<typeof wagmipetABI, TFunctionName>,
+    'abi'
+  > = {} as any,
+) {
+  return usePrepareContractWrite({
+    abi: wagmipetABI,
+    ...config,
+  } as UsePrepareContractWriteConfig<typeof wagmipetABI, TFunctionName>)
+}
+
+/**
+ * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link wagmipetABI}__ and `functionName` set to `"clean"`.
+ */
+export function usePrepareWagmipetClean(
+  config: Omit<
+    UsePrepareContractWriteConfig<typeof wagmipetABI, 'clean'>,
+    'abi' | 'functionName'
+  > = {} as any,
+) {
+  return usePrepareContractWrite({
+    abi: wagmipetABI,
+    functionName: 'clean',
+    ...config,
+  } as UsePrepareContractWriteConfig<typeof wagmipetABI, 'clean'>)
+}
+
+/**
+ * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link wagmipetABI}__ and `functionName` set to `"feed"`.
+ */
+export function usePrepareWagmipetFeed(
+  config: Omit<
+    UsePrepareContractWriteConfig<typeof wagmipetABI, 'feed'>,
+    'abi' | 'functionName'
+  > = {} as any,
+) {
+  return usePrepareContractWrite({
+    abi: wagmipetABI,
+    functionName: 'feed',
+    ...config,
+  } as UsePrepareContractWriteConfig<typeof wagmipetABI, 'feed'>)
+}
+
+/**
+ * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link wagmipetABI}__ and `functionName` set to `"play"`.
+ */
+export function usePrepareWagmipetPlay(
+  config: Omit<
+    UsePrepareContractWriteConfig<typeof wagmipetABI, 'play'>,
+    'abi' | 'functionName'
+  > = {} as any,
+) {
+  return usePrepareContractWrite({
+    abi: wagmipetABI,
+    functionName: 'play',
+    ...config,
+  } as UsePrepareContractWriteConfig<typeof wagmipetABI, 'play'>)
+}
+
+/**
+ * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link wagmipetABI}__ and `functionName` set to `"sleep"`.
+ */
+export function usePrepareWagmipetSleep(
+  config: Omit<
+    UsePrepareContractWriteConfig<typeof wagmipetABI, 'sleep'>,
+    'abi' | 'functionName'
+  > = {} as any,
+) {
+  return usePrepareContractWrite({
+    abi: wagmipetABI,
+    functionName: 'sleep',
+    ...config,
+  } as UsePrepareContractWriteConfig<typeof wagmipetABI, 'sleep'>)
+}
+
+/**
+ * Wraps __{@link useContractEvent}__ with `abi` set to __{@link wagmipetABI}__.
+ */
+export function useWagmipetEvent<TEventName extends string>(
+  config: Omit<
+    UseContractEventConfig<typeof wagmipetABI, TEventName>,
+    'abi'
+  > = {} as any,
+) {
+  return useContractEvent({
+    abi: wagmipetABI,
+    ...config,
+  } as UseContractEventConfig<typeof wagmipetABI, TEventName>)
+}
+
+/**
+ * Wraps __{@link useContractEvent}__ with `abi` set to __{@link wagmipetABI}__ and `eventName` set to `"CaretakerLoved"`.
+ */
+export function useWagmipetCaretakerLovedEvent(
+  config: Omit<
+    UseContractEventConfig<typeof wagmipetABI, 'CaretakerLoved'>,
+    'abi' | 'eventName'
+  > = {} as any,
+) {
+  return useContractEvent({
+    abi: wagmipetABI,
+    eventName: 'CaretakerLoved',
+    ...config,
+  } as UseContractEventConfig<typeof wagmipetABI, 'CaretakerLoved'>)
 }

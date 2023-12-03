@@ -39,6 +39,12 @@ contract TokenizedVickeryAuction {
         address erc20Token;
     }
 
+    struct AuctionKey {
+        address tokenContract;
+        uint256 tokenId;
+    }
+    AuctionKey[] private auctionKeys;
+
     /// @param commitment The hash commitment of a bid value.
     /// @param collateral The amount of collateral backing the bid.
     struct Bid {
@@ -115,6 +121,10 @@ contract TokenizedVickeryAuction {
             index: auctions[tokenContract][tokenId].index + 1,
             erc20Token: erc20Token
         });
+        auctionKeys.push(AuctionKey({
+            tokenContract: tokenContract,
+            tokenId: tokenId
+        }));
     }
 
     /// @notice Commits to a bid on an item being auctioned. If a bid was
@@ -307,6 +317,15 @@ contract TokenizedVickeryAuction {
         string memory logMessage = "success";
         console.logString(logMessage);
         return auction;
+    }
+
+    function getAllAuctions() public view returns (bool) {
+        // Auction[] memory allAuctions = new Auction[](auctionKeys.length);
+        // for (uint256 i = 0; i < auctionKeys.length; i++) {
+        //     AuctionKey memory key = auctionKeys[i];
+        //     allAuctions[i] = auctions[key.tokenContract][key.tokenId];
+        // }
+        return true;
     }
 
     function getBid(

@@ -6,6 +6,7 @@ import { publicProvider } from 'wagmi/providers/public'
 import Home from './pages/home'
 import Network from './pages/network';
 import Profile from './pages/Profile';
+import Mint from './pages/mint';
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
