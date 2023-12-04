@@ -32,7 +32,7 @@ export default function () {
                     <Button
                         type="primary"
                         icon={<TagOutlined />}
-                        onClick={() => navigate('/auction')}
+                        onClick={() => navigate('/auction/create')}
                     >
                         Start Auction
                     </Button>

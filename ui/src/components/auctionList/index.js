@@ -118,12 +118,14 @@ export default function () {
     })
     useEffect(() => {
         const updateCountdown = () => {
-            const newTableData = tableData.map(auction => ({
-                ...auction,
-                timeUntilAuctionEnds: Math.max(auction.timeUntilAuctionEnds - 1, 0),
-                timeUntilRevealEnds: Math.max(auction.timeUntilRevealEnds - 1, 0)
-            }));
-            setTableData(newTableData);
+            if(tableData) {
+                const newTableData = tableData.map(auction => ({
+                    ...auction,
+                    timeUntilAuctionEnds: Math.max(auction.timeUntilAuctionEnds - 1, 0),
+                    timeUntilRevealEnds: Math.max(auction.timeUntilRevealEnds - 1, 0)
+                }));
+                setTableData(newTableData);
+            }
         };
 
         const interval = setInterval(updateCountdown, 1000);
