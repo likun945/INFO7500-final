@@ -1,15 +1,76 @@
 import React, { useState } from 'react';
-import { Form, Button, Select, DatePicker, InputNumber, Row, Col, Input } from 'antd';
-import { useAccount, useContractReads } from 'wagmi';
-import { address_map, BGT_CONTRACT, QBT_CONTRACT } from '../../constants';
+import { Form, Button, Select, DatePicker, InputNumber, Row, Col, Input, Spin, message, Space } from 'antd';
+import { useAccount, useContractReads, useContractWrite } from 'wagmi';
+import { address_map, BGT_CONTRACT, QBT_CONTRACT, AUCTION_CONTRACT } from '../../constants';
+import { useNavigate } from 'react-router-dom';
+
 const { Option } = Select;
 
 const AuctionForm = () => {
     const [form] = Form.useForm();
+    const { token_address, QBT_address, BGT_address, auction_address } = address_map;
     const { address } = useAccount();
     const [assets, setAssets] = useState([]);
     const [availableNFT, setAvailableNFT] = useState([]);
-    const { token_address, QBT_address, BGT_address } = address_map;
+    const [messageApi, contextHolder] = message.useMessage();
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
+    const [submitLoading, setSubmitLoading] = useState(false);
+    const { write: writeAuction } = useContractWrite({
+        ...AUCTION_CONTRACT,
+        functionName: 'createAuction',
+        onSuccess(data) {
+            showSuccess(data);
+            setSubmitLoading(false);
+            setTimeout(() => {
+                navigate('/')
+            }, 3000);
+        },
+        onError(error) {
+            console.log(error)
+            messageApi.open({
+                type: 'error',
+                content: `Error message: ${error}`,
+            });
+            setSubmitLoading(false);
+        }
+    })
+    const { write: bgtApprove } = useContractWrite({
+        ...BGT_CONTRACT,
+        functionName: 'approve',
+        onSuccess(data) {
+            showSuccess(data);
+            setLoading(false);
+        },
+        onError(error) {
+            messageApi.open({
+                type: 'error',
+                content: `Error message: ${error}`,
+            });
+            setLoading(false);
+        }
+    })
+    const { write: qbtApprove } = useContractWrite({
+        ...QBT_CONTRACT,
+        functionName: 'approve',
+        onSuccess(data) {
+            showSuccess(data);
+            setLoading(false);
+        },
+        onError(error) {
+            messageApi.open({
+                type: 'error',
+                content: `Error message: ${error}`,
+            });
+            setLoading(false);
+        }
+    })
+    const showSuccess = (data) => {
+        messageApi.open({
+            type: 'success',
+            content: `Your transacation hash is ${data.hash}`,
+        });
+    }
     const options = [
         {
             "id": 0,
@@ -24,10 +85,11 @@ const AuctionForm = () => {
             "contract_address": BGT_address
         }
     ];
-    const daysToTimestamp = (days) => days * 86400000;
+    const daysToTimestamp = (days) => days * 86400;
     const onFinish = (values) => {
-        // console.log('Received values from form: ', values);
-        let auctionStartTimeTimestamp = values.auctionStartTime.valueOf();
+        setSubmitLoading(true);
+        let auctionStartTimeTimestampInSeconds = Math.floor(values.auctionStartTime.valueOf() / 1000);
+
         const { nftTypeID, nftTokenId, startingPrice, erc20ContractAddress, bidPeriod,
             revealPeriod } = values;
         const nftAddress = options[nftTypeID].contract_address;
@@ -35,11 +97,14 @@ const AuctionForm = () => {
             nftAddress,
             nftTokenId,
             erc20ContractAddress,
-            auctionStartTimeTimestamp,
+            auctionStartTimeTimestampInSeconds,
             bidPeriod,
             revealPeriod,
             startingPrice
         ]
+        writeAuction({
+            args
+        })
     };
     const layout = {
         labelCol: { span: 8 },
@@ -65,16 +130,16 @@ const AuctionForm = () => {
     }
     useContractReads({
         contracts: [
-          {
-            ...BGT_CONTRACT,
-            functionName: 'tokensOfOwner',
-            args: [address]
-          },
-          {
-            ...QBT_CONTRACT,
-            functionName: 'tokensOfOwner',
-            args: [address]
-          }
+            {
+                ...QBT_CONTRACT,
+                functionName: 'tokensOfOwner',
+                args: [address]
+            },
+            {
+                ...BGT_CONTRACT,
+                functionName: 'tokensOfOwner',
+                args: [address]
+            }
         ],
         select: (data) => transform(data),
         onSuccess(data) {
@@ -83,16 +148,36 @@ const AuctionForm = () => {
     })
     const onFormValuesChange = (changedValues) => {
         const { nftTypeID } = changedValues;
-        if (assets.length > 0 && (nftTypeID || nftTypeID === 0)) { 
+        if (assets.length > 0 && (nftTypeID || nftTypeID === 0)) {
             const nftAssets = assets[nftTypeID];
             if (nftAssets) {
                 setAvailableNFT(nftAssets.result);
-                console.log(nftAssets.result)
             }
         }
     };
+    const handleApprove = async () => {
+        try {
+            const values = await form.validateFields(['nftTypeID', 'nftTokenId']);
+            const nftType = values.nftTypeID;
+            const nftTokenId = values.nftTokenId;
+            setLoading(true)
+            if (nftType === 0) {
+                qbtApprove({
+                    args: [auction_address, nftTokenId]
+                });
+            } else {
+                bgtApprove({ args: [auction_address, nftTokenId] });
+            }
+        } catch (error) {
+            console.error("Validation error:", error);
+        }
+    }
+    const handleBack = () => {
+        navigate('/');
+    }
     return (
         <div style={{ padding: '20px', marginTop: '20px', backgroundColor: '#f0f2f5', display: 'flex', justifyContent: 'center' }}>
+            {contextHolder}
             <Form
                 onValuesChange={onFormValuesChange}
                 form={form}
@@ -102,7 +187,7 @@ const AuctionForm = () => {
                 <Form.Item name="seller" label="Seller" rules={[{ required: true }]} initialValue={address}>
                     <Input disabled={true} ></Input>
                 </Form.Item>
-                <Form.Item name="nftTypeID" label="NFT Type" rules={[{ required: true }]}>
+                <Form.Item name="nftTypeID" label="NFT Type" rules={[{ required: true, message: 'Please select your NFT type' }]}>
                     <Select placeholder="Select a NFT type">
                         {
                             options.map((option, index) => (
@@ -111,23 +196,24 @@ const AuctionForm = () => {
                         }
                     </Select>
                 </Form.Item>
-                <Row gutter={8}>
-                    <Col span={16}>
-                        <Form.Item name="nftTokenId" label="NFT Token ID" rules={[{ required: true }]}>
-                            <Select placeholder="Select a Token ID">
-                                {
-                                    availableNFT.map((token, index) => {
-                                       return <Option key={index} value={token}>TokenID {token}</Option>
-                                    })
-                                }
-                            </Select>
-                        </Form.Item>
-                    </Col>
-                    <Col span={8}>
-                        <Button type="primary">Approve</Button>
-                    </Col>
-                </Row>
-
+                <Spin spinning={loading} tip="Loading...">
+                    <Row gutter={8}>
+                        <Col span={16}>
+                            <Form.Item name="nftTokenId" label="NFT Token ID" rules={[{ required: true, message: 'Please select your NFT token ID' }]}>
+                                <Select placeholder="Select a Token ID">
+                                    {
+                                        availableNFT.map((token, index) => {
+                                            return <Option key={index} value={token}>TokenID {token}</Option>
+                                        })
+                                    }
+                                </Select>
+                            </Form.Item>
+                        </Col>
+                        <Col span={8}>
+                            <Button type="primary" onClick={handleApprove}>Approve</Button>
+                        </Col>
+                    </Row>
+                </Spin>
                 <Form.Item
                     name="erc20ContractAddress"
                     label="ERC20 Token"
@@ -161,10 +247,15 @@ const AuctionForm = () => {
                     <InputNumber min={1} />
                 </Form.Item>
 
-                <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 10 }}>
-                    <Button type="primary" htmlType="submit">
-                        Create Auction
-                    </Button>
+                <Form.Item wrapperCol={{ ...layout.wrapperCol, offset: 6 }}>
+                    <Space>
+                        <Spin spinning={submitLoading}>
+                        <Button type="primary" htmlType="submit">
+                            Create Auction
+                        </Button>
+                        </Spin>
+                        <Button onClick={handleBack}>Back Home</Button>
+                    </Space>
                 </Form.Item>
             </Form>
         </div>

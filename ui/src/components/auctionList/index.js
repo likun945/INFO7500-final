@@ -7,6 +7,7 @@ import { address_map } from '../../constants'
 export default function () {
     const [tableData, setTableData] = useState()
     const { auction_address } = address_map;
+    const [loading, setLoading] = useState(true);
     const columns = [
         {
             title: 'Index',
@@ -109,11 +110,12 @@ export default function () {
                     numUnrevealedBids,
                     secondHighestBid,
                     key: index + 1, // 或使用其他生成的唯一标识符
-                    timeUntilRevealEnds: auction.endOfRevealPeriod - currentTime,
-                    timeUntilAuctionEnds: auction.endOfBiddingPeriod - currentTime
+                    timeUntilRevealEnds: Math.max(0, auction.endOfRevealPeriod - currentTime),
+                    timeUntilAuctionEnds: Math.max(0, auction.endOfBiddingPeriod - currentTime)
                 };
             });
             setTableData(formattedData);
+            setLoading(false);
         }
     })
     useEffect(() => {
@@ -149,7 +151,7 @@ export default function () {
     }
     return (
         <div>
-            <Table columns={columns} dataSource={tableData}></Table>
+            <Table loading={loading} columns={columns} dataSource={tableData}></Table>
         </div>
     )
 }
