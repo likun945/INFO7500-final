@@ -12,4 +12,4 @@ const command_deploy_auction =
 "forge create src/WagmitPet.sol:Wagmipet --rpc-url https://eth-sepolia.g.alchemy.com/v2/nZ_BUOB0QRFF1VXy0A6Gj0kBJi7znXwP --private-key a59e8f9d8d52750eab1cb8e66bce676600ddb8d89eabdd818af1c2b8d82b0a47 --etherscan-api-key 4PDHGGUZ1UGCHPZXMFP7P4X2MHGTBBI2Q3 \
 --verify"
 
-const command_withargs = 'forge create src/BoardgameNFT.sol:BoardgameNFT --rpc-url https://eth-sepolia.g.alchemy.com/v2/xH2AX6LgCPxe_JyfdF_VlNU_QyHXrE9x --private-key a59e8f9d8d52750eab1cb8e66bce676600ddb8d89eabdd818af1c2b8d82b0a47 --etherscan-api-key 4PDHGGUZ1UGCHPZXMFP7P4X2MHGTBBI2Q3 --constructor-args "BoardgameToken" "BGT" --verify'
+const command_withargs = 'forge create src/MockERC721.sol:MockERC721 --rpc-url https://eth-sepolia.g.alchemy.com/v2/zYK9EqUWyrwbgdQtdB-mho6ipK0MPvmD --private-key a59e8f9d8d52750eab1cb8e66bce676600ddb8d89eabdd818af1c2b8d82b0a47 --etherscan-api-key 4PDHGGUZ1UGCHPZXMFP7P4X2MHGTBBI2Q3 --constructor-args "QBToken" "QBT" --verify'

@@ -4,20 +4,22 @@ import { useContractWrite } from 'wagmi';
 import { mockErc721ABI, boardGameNftABI } from '../../generated';
 import { useAccount } from 'wagmi';
 import { useNavigate } from 'react-router-dom';
+import { address_map } from '../../constants';
 
 const { Option } = Select;
+const { QBT_address, BGT_address} = address_map;
 const options = [
     {
         "id": 0,
         "name": "QBToken",
         "tag": "QBT",
-        "contract_address": "0xEC1fbD2a33b3a6be983e0209dA7e14b28454575c"
+        "contract_address": QBT_address
     },
     {
         "id": 1,
         "name": "BoardgameToken",
         "tag": "BGT",
-        "contract_address": "0x8960CF2607ebcE52129ea0915406dC891310d40b"
+        "contract_address": BGT_address
     }
 ];
 

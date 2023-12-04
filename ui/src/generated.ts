@@ -252,6 +252,13 @@ export const boardGameNftABI = [
     outputs: [{ name: '', internalType: 'string', type: 'string' }],
   },
   {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [{ name: 'owner', internalType: 'address', type: 'address' }],
+    name: 'tokensOfOwner',
+    outputs: [{ name: '', internalType: 'uint256[]', type: 'uint256[]' }],
+  },
+  {
     stateMutability: 'nonpayable',
     type: 'function',
     inputs: [
@@ -1962,6 +1969,13 @@ export const mockErc721ABI = [
     outputs: [{ name: '', internalType: 'string', type: 'string' }],
   },
   {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [{ name: 'owner', internalType: 'address', type: 'address' }],
+    name: 'tokensOfOwner',
+    outputs: [{ name: '', internalType: 'uint256[]', type: 'uint256[]' }],
+  },
+  {
     stateMutability: 'nonpayable',
     type: 'function',
     inputs: [
@@ -3421,6 +3435,29 @@ export function useBoardGameNftTokenUri<
   return useContractRead({
     abi: boardGameNftABI,
     functionName: 'tokenURI',
+    ...config,
+  } as UseContractReadConfig<
+    typeof boardGameNftABI,
+    TFunctionName,
+    TSelectData
+  >)
+}
+
+/**
+ * Wraps __{@link useContractRead}__ with `abi` set to __{@link boardGameNftABI}__ and `functionName` set to `"tokensOfOwner"`.
+ */
+export function useBoardGameNftTokensOfOwner<
+  TFunctionName extends 'tokensOfOwner',
+  TSelectData = ReadContractResult<typeof boardGameNftABI, TFunctionName>,
+>(
+  config: Omit<
+    UseContractReadConfig<typeof boardGameNftABI, TFunctionName, TSelectData>,
+    'abi' | 'functionName'
+  > = {} as any,
+) {
+  return useContractRead({
+    abi: boardGameNftABI,
+    functionName: 'tokensOfOwner',
     ...config,
   } as UseContractReadConfig<
     typeof boardGameNftABI,
@@ -7916,6 +7953,25 @@ export function useMockErc721TokenUri<
   return useContractRead({
     abi: mockErc721ABI,
     functionName: 'tokenURI',
+    ...config,
+  } as UseContractReadConfig<typeof mockErc721ABI, TFunctionName, TSelectData>)
+}
+
+/**
+ * Wraps __{@link useContractRead}__ with `abi` set to __{@link mockErc721ABI}__ and `functionName` set to `"tokensOfOwner"`.
+ */
+export function useMockErc721TokensOfOwner<
+  TFunctionName extends 'tokensOfOwner',
+  TSelectData = ReadContractResult<typeof mockErc721ABI, TFunctionName>,
+>(
+  config: Omit<
+    UseContractReadConfig<typeof mockErc721ABI, TFunctionName, TSelectData>,
+    'abi' | 'functionName'
+  > = {} as any,
+) {
+  return useContractRead({
+    abi: mockErc721ABI,
+    functionName: 'tokensOfOwner',
     ...config,
   } as UseContractReadConfig<typeof mockErc721ABI, TFunctionName, TSelectData>)
 }

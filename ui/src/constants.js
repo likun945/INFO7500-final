@@ -1,7 +1,7 @@
 export const address_map = {
     auction_address: '0x507Fb449addCCa4aC89a838d1B5f134425d63124',
-    NFT_address: '0xEC1fbD2a33b3a6be983e0209dA7e14b28454575c',
-    BGT_address: '0x8960CF2607ebcE52129ea0915406dC891310d40b', //Boardgame token(NFT)
+    QBT_address: '0x2f698CB14D8150785AcCbEd9d9544999631ec0dF',
+    BGT_address: '0xab9b88e591AE6Df69F9B0765d83112814e22Ed05', //Boardgame token(NFT)
     token_address: '0x40CA1cd6482790f79b4bd862070Ef1236274625F',
     user_address: '0x94d3130C53288921Cd620b00f1e6Fd95aA8ACF2d'
 }
