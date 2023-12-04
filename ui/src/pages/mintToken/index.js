@@ -4,7 +4,6 @@ import { useContractWrite } from 'wagmi';
 import { mockErc20ABI } from '../../generated';
 import { useAccount } from 'wagmi';
 import { useNavigate } from 'react-router-dom';
-import {} from 'web3';
 import Web3 from 'web3';
 
 const { Option } = Select;
@@ -22,7 +21,7 @@ export default function MintNFT() {
   const { address } = useAccount()
   const [messageApi, contextHolder] = message.useMessage();
   const navigate = useNavigate();
-  const { toWei, fromWei } = Web3.utils;
+  const { toWei } = Web3.utils;
   const { write, isLoading } = useContractWrite({
     address: options[0].contract_address,
     abi: mockErc20ABI,

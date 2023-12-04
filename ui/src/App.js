@@ -6,6 +6,7 @@ import { publicProvider } from 'wagmi/providers/public';
 import Home from './pages/home';
 import MintNFT from './pages/mintNFT';
 import MintToken from './pages/mintToken';
+import Assets from './pages/assets';
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
 import './App.css'
 
@@ -33,7 +34,7 @@ function App() {
             <Route path="/" element={<Home />}></Route>
             <Route path="/mint-nft" element={<MintNFT />}></Route>
             <Route path="/mint-erc20" element={<MintToken />}></Route>
-            {/* <Route path="/auction" element={<Mint />}></Route> */}
+            <Route path="/view-assets" element={<Assets />}></Route>
           </Routes>
         </BrowserRouter>
       </div>

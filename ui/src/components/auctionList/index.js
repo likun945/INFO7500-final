@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Button, Badge } from 'antd';
+import { Table, Badge } from 'antd';
 import { useContractRead } from 'wagmi'
 import { tokenizedVickeryAuctionABI } from '../../generated';
 import { address_map } from '../../constants'
