@@ -67,6 +67,204 @@ export const auctionDeployerABI = [
 ] as const
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// BoardGameNFT
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+export const boardGameNftABI = [
+  {
+    stateMutability: 'nonpayable',
+    type: 'constructor',
+    inputs: [
+      { name: 'name', internalType: 'string', type: 'string' },
+      { name: 'symbol', internalType: 'string', type: 'string' },
+    ],
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'owner',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'approved',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'tokenId',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+    ],
+    name: 'Approval',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'owner',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      {
+        name: 'operator',
+        internalType: 'address',
+        type: 'address',
+        indexed: true,
+      },
+      { name: 'approved', internalType: 'bool', type: 'bool', indexed: false },
+    ],
+    name: 'ApprovalForAll',
+  },
+  {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      { name: 'from', internalType: 'address', type: 'address', indexed: true },
+      { name: 'to', internalType: 'address', type: 'address', indexed: true },
+      {
+        name: 'tokenId',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: true,
+      },
+    ],
+    name: 'Transfer',
+  },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'tokenId', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'approve',
+    outputs: [],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [{ name: 'owner', internalType: 'address', type: 'address' }],
+    name: 'balanceOf',
+    outputs: [{ name: '', internalType: 'uint256', type: 'uint256' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [{ name: 'tokenId', internalType: 'uint256', type: 'uint256' }],
+    name: 'getApproved',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [
+      { name: 'owner', internalType: 'address', type: 'address' },
+      { name: 'operator', internalType: 'address', type: 'address' },
+    ],
+    name: 'isApprovedForAll',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+  },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'uri', internalType: 'string', type: 'string' },
+    ],
+    name: 'mint',
+    outputs: [],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'name',
+    outputs: [{ name: '', internalType: 'string', type: 'string' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [{ name: 'tokenId', internalType: 'uint256', type: 'uint256' }],
+    name: 'ownerOf',
+    outputs: [{ name: '', internalType: 'address', type: 'address' }],
+  },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [
+      { name: 'from', internalType: 'address', type: 'address' },
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'tokenId', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'safeTransferFrom',
+    outputs: [],
+  },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [
+      { name: 'from', internalType: 'address', type: 'address' },
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'tokenId', internalType: 'uint256', type: 'uint256' },
+      { name: '_data', internalType: 'bytes', type: 'bytes' },
+    ],
+    name: 'safeTransferFrom',
+    outputs: [],
+  },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [
+      { name: 'operator', internalType: 'address', type: 'address' },
+      { name: 'approved', internalType: 'bool', type: 'bool' },
+    ],
+    name: 'setApprovalForAll',
+    outputs: [],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [{ name: 'interfaceId', internalType: 'bytes4', type: 'bytes4' }],
+    name: 'supportsInterface',
+    outputs: [{ name: '', internalType: 'bool', type: 'bool' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [],
+    name: 'symbol',
+    outputs: [{ name: '', internalType: 'string', type: 'string' }],
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    inputs: [{ name: 'tokenId', internalType: 'uint256', type: 'uint256' }],
+    name: 'tokenURI',
+    outputs: [{ name: '', internalType: 'string', type: 'string' }],
+  },
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    inputs: [
+      { name: 'from', internalType: 'address', type: 'address' },
+      { name: 'to', internalType: 'address', type: 'address' },
+      { name: 'tokenId', internalType: 'uint256', type: 'uint256' },
+    ],
+    name: 'transferFrom',
+    outputs: [],
+  },
+] as const
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ERC165
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -3023,6 +3221,545 @@ export function usePrepareAuctionDeployerUpgradeToV2(
     functionName: 'upgradeToV2',
     ...config,
   } as UsePrepareContractWriteConfig<typeof auctionDeployerABI, 'upgradeToV2'>)
+}
+
+/**
+ * Wraps __{@link useContractRead}__ with `abi` set to __{@link boardGameNftABI}__.
+ */
+export function useBoardGameNftRead<
+  TFunctionName extends string,
+  TSelectData = ReadContractResult<typeof boardGameNftABI, TFunctionName>,
+>(
+  config: Omit<
+    UseContractReadConfig<typeof boardGameNftABI, TFunctionName, TSelectData>,
+    'abi'
+  > = {} as any,
+) {
+  return useContractRead({
+    abi: boardGameNftABI,
+    ...config,
+  } as UseContractReadConfig<
+    typeof boardGameNftABI,
+    TFunctionName,
+    TSelectData
+  >)
+}
+
+/**
+ * Wraps __{@link useContractRead}__ with `abi` set to __{@link boardGameNftABI}__ and `functionName` set to `"balanceOf"`.
+ */
+export function useBoardGameNftBalanceOf<
+  TFunctionName extends 'balanceOf',
+  TSelectData = ReadContractResult<typeof boardGameNftABI, TFunctionName>,
+>(
+  config: Omit<
+    UseContractReadConfig<typeof boardGameNftABI, TFunctionName, TSelectData>,
+    'abi' | 'functionName'
+  > = {} as any,
+) {
+  return useContractRead({
+    abi: boardGameNftABI,
+    functionName: 'balanceOf',
+    ...config,
+  } as UseContractReadConfig<
+    typeof boardGameNftABI,
+    TFunctionName,
+    TSelectData
+  >)
+}
+
+/**
+ * Wraps __{@link useContractRead}__ with `abi` set to __{@link boardGameNftABI}__ and `functionName` set to `"getApproved"`.
+ */
+export function useBoardGameNftGetApproved<
+  TFunctionName extends 'getApproved',
+  TSelectData = ReadContractResult<typeof boardGameNftABI, TFunctionName>,
+>(
+  config: Omit<
+    UseContractReadConfig<typeof boardGameNftABI, TFunctionName, TSelectData>,
+    'abi' | 'functionName'
+  > = {} as any,
+) {
+  return useContractRead({
+    abi: boardGameNftABI,
+    functionName: 'getApproved',
+    ...config,
+  } as UseContractReadConfig<
+    typeof boardGameNftABI,
+    TFunctionName,
+    TSelectData
+  >)
+}
+
+/**
+ * Wraps __{@link useContractRead}__ with `abi` set to __{@link boardGameNftABI}__ and `functionName` set to `"isApprovedForAll"`.
+ */
+export function useBoardGameNftIsApprovedForAll<
+  TFunctionName extends 'isApprovedForAll',
+  TSelectData = ReadContractResult<typeof boardGameNftABI, TFunctionName>,
+>(
+  config: Omit<
+    UseContractReadConfig<typeof boardGameNftABI, TFunctionName, TSelectData>,
+    'abi' | 'functionName'
+  > = {} as any,
+) {
+  return useContractRead({
+    abi: boardGameNftABI,
+    functionName: 'isApprovedForAll',
+    ...config,
+  } as UseContractReadConfig<
+    typeof boardGameNftABI,
+    TFunctionName,
+    TSelectData
+  >)
+}
+
+/**
+ * Wraps __{@link useContractRead}__ with `abi` set to __{@link boardGameNftABI}__ and `functionName` set to `"name"`.
+ */
+export function useBoardGameNftName<
+  TFunctionName extends 'name',
+  TSelectData = ReadContractResult<typeof boardGameNftABI, TFunctionName>,
+>(
+  config: Omit<
+    UseContractReadConfig<typeof boardGameNftABI, TFunctionName, TSelectData>,
+    'abi' | 'functionName'
+  > = {} as any,
+) {
+  return useContractRead({
+    abi: boardGameNftABI,
+    functionName: 'name',
+    ...config,
+  } as UseContractReadConfig<
+    typeof boardGameNftABI,
+    TFunctionName,
+    TSelectData
+  >)
+}
+
+/**
+ * Wraps __{@link useContractRead}__ with `abi` set to __{@link boardGameNftABI}__ and `functionName` set to `"ownerOf"`.
+ */
+export function useBoardGameNftOwnerOf<
+  TFunctionName extends 'ownerOf',
+  TSelectData = ReadContractResult<typeof boardGameNftABI, TFunctionName>,
+>(
+  config: Omit<
+    UseContractReadConfig<typeof boardGameNftABI, TFunctionName, TSelectData>,
+    'abi' | 'functionName'
+  > = {} as any,
+) {
+  return useContractRead({
+    abi: boardGameNftABI,
+    functionName: 'ownerOf',
+    ...config,
+  } as UseContractReadConfig<
+    typeof boardGameNftABI,
+    TFunctionName,
+    TSelectData
+  >)
+}
+
+/**
+ * Wraps __{@link useContractRead}__ with `abi` set to __{@link boardGameNftABI}__ and `functionName` set to `"supportsInterface"`.
+ */
+export function useBoardGameNftSupportsInterface<
+  TFunctionName extends 'supportsInterface',
+  TSelectData = ReadContractResult<typeof boardGameNftABI, TFunctionName>,
+>(
+  config: Omit<
+    UseContractReadConfig<typeof boardGameNftABI, TFunctionName, TSelectData>,
+    'abi' | 'functionName'
+  > = {} as any,
+) {
+  return useContractRead({
+    abi: boardGameNftABI,
+    functionName: 'supportsInterface',
+    ...config,
+  } as UseContractReadConfig<
+    typeof boardGameNftABI,
+    TFunctionName,
+    TSelectData
+  >)
+}
+
+/**
+ * Wraps __{@link useContractRead}__ with `abi` set to __{@link boardGameNftABI}__ and `functionName` set to `"symbol"`.
+ */
+export function useBoardGameNftSymbol<
+  TFunctionName extends 'symbol',
+  TSelectData = ReadContractResult<typeof boardGameNftABI, TFunctionName>,
+>(
+  config: Omit<
+    UseContractReadConfig<typeof boardGameNftABI, TFunctionName, TSelectData>,
+    'abi' | 'functionName'
+  > = {} as any,
+) {
+  return useContractRead({
+    abi: boardGameNftABI,
+    functionName: 'symbol',
+    ...config,
+  } as UseContractReadConfig<
+    typeof boardGameNftABI,
+    TFunctionName,
+    TSelectData
+  >)
+}
+
+/**
+ * Wraps __{@link useContractRead}__ with `abi` set to __{@link boardGameNftABI}__ and `functionName` set to `"tokenURI"`.
+ */
+export function useBoardGameNftTokenUri<
+  TFunctionName extends 'tokenURI',
+  TSelectData = ReadContractResult<typeof boardGameNftABI, TFunctionName>,
+>(
+  config: Omit<
+    UseContractReadConfig<typeof boardGameNftABI, TFunctionName, TSelectData>,
+    'abi' | 'functionName'
+  > = {} as any,
+) {
+  return useContractRead({
+    abi: boardGameNftABI,
+    functionName: 'tokenURI',
+    ...config,
+  } as UseContractReadConfig<
+    typeof boardGameNftABI,
+    TFunctionName,
+    TSelectData
+  >)
+}
+
+/**
+ * Wraps __{@link useContractWrite}__ with `abi` set to __{@link boardGameNftABI}__.
+ */
+export function useBoardGameNftWrite<
+  TFunctionName extends string,
+  TMode extends WriteContractMode = undefined,
+>(
+  config: TMode extends 'prepared'
+    ? UseContractWriteConfig<
+        PrepareWriteContractResult<
+          typeof boardGameNftABI,
+          string
+        >['request']['abi'],
+        TFunctionName,
+        TMode
+      >
+    : UseContractWriteConfig<typeof boardGameNftABI, TFunctionName, TMode> & {
+        abi?: never
+      } = {} as any,
+) {
+  return useContractWrite<typeof boardGameNftABI, TFunctionName, TMode>({
+    abi: boardGameNftABI,
+    ...config,
+  } as any)
+}
+
+/**
+ * Wraps __{@link useContractWrite}__ with `abi` set to __{@link boardGameNftABI}__ and `functionName` set to `"approve"`.
+ */
+export function useBoardGameNftApprove<
+  TMode extends WriteContractMode = undefined,
+>(
+  config: TMode extends 'prepared'
+    ? UseContractWriteConfig<
+        PrepareWriteContractResult<
+          typeof boardGameNftABI,
+          'approve'
+        >['request']['abi'],
+        'approve',
+        TMode
+      > & { functionName?: 'approve' }
+    : UseContractWriteConfig<typeof boardGameNftABI, 'approve', TMode> & {
+        abi?: never
+        functionName?: 'approve'
+      } = {} as any,
+) {
+  return useContractWrite<typeof boardGameNftABI, 'approve', TMode>({
+    abi: boardGameNftABI,
+    functionName: 'approve',
+    ...config,
+  } as any)
+}
+
+/**
+ * Wraps __{@link useContractWrite}__ with `abi` set to __{@link boardGameNftABI}__ and `functionName` set to `"mint"`.
+ */
+export function useBoardGameNftMint<
+  TMode extends WriteContractMode = undefined,
+>(
+  config: TMode extends 'prepared'
+    ? UseContractWriteConfig<
+        PrepareWriteContractResult<
+          typeof boardGameNftABI,
+          'mint'
+        >['request']['abi'],
+        'mint',
+        TMode
+      > & { functionName?: 'mint' }
+    : UseContractWriteConfig<typeof boardGameNftABI, 'mint', TMode> & {
+        abi?: never
+        functionName?: 'mint'
+      } = {} as any,
+) {
+  return useContractWrite<typeof boardGameNftABI, 'mint', TMode>({
+    abi: boardGameNftABI,
+    functionName: 'mint',
+    ...config,
+  } as any)
+}
+
+/**
+ * Wraps __{@link useContractWrite}__ with `abi` set to __{@link boardGameNftABI}__ and `functionName` set to `"safeTransferFrom"`.
+ */
+export function useBoardGameNftSafeTransferFrom<
+  TMode extends WriteContractMode = undefined,
+>(
+  config: TMode extends 'prepared'
+    ? UseContractWriteConfig<
+        PrepareWriteContractResult<
+          typeof boardGameNftABI,
+          'safeTransferFrom'
+        >['request']['abi'],
+        'safeTransferFrom',
+        TMode
+      > & { functionName?: 'safeTransferFrom' }
+    : UseContractWriteConfig<
+        typeof boardGameNftABI,
+        'safeTransferFrom',
+        TMode
+      > & {
+        abi?: never
+        functionName?: 'safeTransferFrom'
+      } = {} as any,
+) {
+  return useContractWrite<typeof boardGameNftABI, 'safeTransferFrom', TMode>({
+    abi: boardGameNftABI,
+    functionName: 'safeTransferFrom',
+    ...config,
+  } as any)
+}
+
+/**
+ * Wraps __{@link useContractWrite}__ with `abi` set to __{@link boardGameNftABI}__ and `functionName` set to `"setApprovalForAll"`.
+ */
+export function useBoardGameNftSetApprovalForAll<
+  TMode extends WriteContractMode = undefined,
+>(
+  config: TMode extends 'prepared'
+    ? UseContractWriteConfig<
+        PrepareWriteContractResult<
+          typeof boardGameNftABI,
+          'setApprovalForAll'
+        >['request']['abi'],
+        'setApprovalForAll',
+        TMode
+      > & { functionName?: 'setApprovalForAll' }
+    : UseContractWriteConfig<
+        typeof boardGameNftABI,
+        'setApprovalForAll',
+        TMode
+      > & {
+        abi?: never
+        functionName?: 'setApprovalForAll'
+      } = {} as any,
+) {
+  return useContractWrite<typeof boardGameNftABI, 'setApprovalForAll', TMode>({
+    abi: boardGameNftABI,
+    functionName: 'setApprovalForAll',
+    ...config,
+  } as any)
+}
+
+/**
+ * Wraps __{@link useContractWrite}__ with `abi` set to __{@link boardGameNftABI}__ and `functionName` set to `"transferFrom"`.
+ */
+export function useBoardGameNftTransferFrom<
+  TMode extends WriteContractMode = undefined,
+>(
+  config: TMode extends 'prepared'
+    ? UseContractWriteConfig<
+        PrepareWriteContractResult<
+          typeof boardGameNftABI,
+          'transferFrom'
+        >['request']['abi'],
+        'transferFrom',
+        TMode
+      > & { functionName?: 'transferFrom' }
+    : UseContractWriteConfig<typeof boardGameNftABI, 'transferFrom', TMode> & {
+        abi?: never
+        functionName?: 'transferFrom'
+      } = {} as any,
+) {
+  return useContractWrite<typeof boardGameNftABI, 'transferFrom', TMode>({
+    abi: boardGameNftABI,
+    functionName: 'transferFrom',
+    ...config,
+  } as any)
+}
+
+/**
+ * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link boardGameNftABI}__.
+ */
+export function usePrepareBoardGameNftWrite<TFunctionName extends string>(
+  config: Omit<
+    UsePrepareContractWriteConfig<typeof boardGameNftABI, TFunctionName>,
+    'abi'
+  > = {} as any,
+) {
+  return usePrepareContractWrite({
+    abi: boardGameNftABI,
+    ...config,
+  } as UsePrepareContractWriteConfig<typeof boardGameNftABI, TFunctionName>)
+}
+
+/**
+ * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link boardGameNftABI}__ and `functionName` set to `"approve"`.
+ */
+export function usePrepareBoardGameNftApprove(
+  config: Omit<
+    UsePrepareContractWriteConfig<typeof boardGameNftABI, 'approve'>,
+    'abi' | 'functionName'
+  > = {} as any,
+) {
+  return usePrepareContractWrite({
+    abi: boardGameNftABI,
+    functionName: 'approve',
+    ...config,
+  } as UsePrepareContractWriteConfig<typeof boardGameNftABI, 'approve'>)
+}
+
+/**
+ * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link boardGameNftABI}__ and `functionName` set to `"mint"`.
+ */
+export function usePrepareBoardGameNftMint(
+  config: Omit<
+    UsePrepareContractWriteConfig<typeof boardGameNftABI, 'mint'>,
+    'abi' | 'functionName'
+  > = {} as any,
+) {
+  return usePrepareContractWrite({
+    abi: boardGameNftABI,
+    functionName: 'mint',
+    ...config,
+  } as UsePrepareContractWriteConfig<typeof boardGameNftABI, 'mint'>)
+}
+
+/**
+ * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link boardGameNftABI}__ and `functionName` set to `"safeTransferFrom"`.
+ */
+export function usePrepareBoardGameNftSafeTransferFrom(
+  config: Omit<
+    UsePrepareContractWriteConfig<typeof boardGameNftABI, 'safeTransferFrom'>,
+    'abi' | 'functionName'
+  > = {} as any,
+) {
+  return usePrepareContractWrite({
+    abi: boardGameNftABI,
+    functionName: 'safeTransferFrom',
+    ...config,
+  } as UsePrepareContractWriteConfig<
+    typeof boardGameNftABI,
+    'safeTransferFrom'
+  >)
+}
+
+/**
+ * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link boardGameNftABI}__ and `functionName` set to `"setApprovalForAll"`.
+ */
+export function usePrepareBoardGameNftSetApprovalForAll(
+  config: Omit<
+    UsePrepareContractWriteConfig<typeof boardGameNftABI, 'setApprovalForAll'>,
+    'abi' | 'functionName'
+  > = {} as any,
+) {
+  return usePrepareContractWrite({
+    abi: boardGameNftABI,
+    functionName: 'setApprovalForAll',
+    ...config,
+  } as UsePrepareContractWriteConfig<
+    typeof boardGameNftABI,
+    'setApprovalForAll'
+  >)
+}
+
+/**
+ * Wraps __{@link usePrepareContractWrite}__ with `abi` set to __{@link boardGameNftABI}__ and `functionName` set to `"transferFrom"`.
+ */
+export function usePrepareBoardGameNftTransferFrom(
+  config: Omit<
+    UsePrepareContractWriteConfig<typeof boardGameNftABI, 'transferFrom'>,
+    'abi' | 'functionName'
+  > = {} as any,
+) {
+  return usePrepareContractWrite({
+    abi: boardGameNftABI,
+    functionName: 'transferFrom',
+    ...config,
+  } as UsePrepareContractWriteConfig<typeof boardGameNftABI, 'transferFrom'>)
+}
+
+/**
+ * Wraps __{@link useContractEvent}__ with `abi` set to __{@link boardGameNftABI}__.
+ */
+export function useBoardGameNftEvent<TEventName extends string>(
+  config: Omit<
+    UseContractEventConfig<typeof boardGameNftABI, TEventName>,
+    'abi'
+  > = {} as any,
+) {
+  return useContractEvent({
+    abi: boardGameNftABI,
+    ...config,
+  } as UseContractEventConfig<typeof boardGameNftABI, TEventName>)
+}
+
+/**
+ * Wraps __{@link useContractEvent}__ with `abi` set to __{@link boardGameNftABI}__ and `eventName` set to `"Approval"`.
+ */
+export function useBoardGameNftApprovalEvent(
+  config: Omit<
+    UseContractEventConfig<typeof boardGameNftABI, 'Approval'>,
+    'abi' | 'eventName'
+  > = {} as any,
+) {
+  return useContractEvent({
+    abi: boardGameNftABI,
+    eventName: 'Approval',
+    ...config,
+  } as UseContractEventConfig<typeof boardGameNftABI, 'Approval'>)
+}
+
+/**
+ * Wraps __{@link useContractEvent}__ with `abi` set to __{@link boardGameNftABI}__ and `eventName` set to `"ApprovalForAll"`.
+ */
+export function useBoardGameNftApprovalForAllEvent(
+  config: Omit<
+    UseContractEventConfig<typeof boardGameNftABI, 'ApprovalForAll'>,
+    'abi' | 'eventName'
+  > = {} as any,
+) {
+  return useContractEvent({
+    abi: boardGameNftABI,
+    eventName: 'ApprovalForAll',
+    ...config,
+  } as UseContractEventConfig<typeof boardGameNftABI, 'ApprovalForAll'>)
+}
+
+/**
+ * Wraps __{@link useContractEvent}__ with `abi` set to __{@link boardGameNftABI}__ and `eventName` set to `"Transfer"`.
+ */
+export function useBoardGameNftTransferEvent(
+  config: Omit<
+    UseContractEventConfig<typeof boardGameNftABI, 'Transfer'>,
+    'abi' | 'eventName'
+  > = {} as any,
+) {
+  return useContractEvent({
+    abi: boardGameNftABI,
+    eventName: 'Transfer',
+    ...config,
+  } as UseContractEventConfig<typeof boardGameNftABI, 'Transfer'>)
 }
 
 /**

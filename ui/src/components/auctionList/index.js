@@ -113,7 +113,6 @@ export default function () {
                     timeUntilAuctionEnds: auction.endOfBiddingPeriod - currentTime
                 };
             });
-            console.log(formattedData)
             setTableData(formattedData);
         }
     })

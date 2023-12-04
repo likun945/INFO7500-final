@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Button, Flex } from 'antd';
-import { SketchOutlined, MoneyCollectOutlined, TagOutlined } from '@ant-design/icons';
+import { SketchOutlined, MoneyCollectOutlined, TagOutlined, EyeOutlined } from '@ant-design/icons';
 import { useNavigate } from 'react-router-dom';
 
 export default function () {
@@ -8,27 +8,42 @@ export default function () {
 
     return (
         <div style={{ margin: '15px' }}>
-            <Flex wrap="wrap" gap="small" className="site-button-ghost-wrapper">
+            <Flex 
+                wrap="wrap" 
+                gap="small" 
+                className="site-button-ghost-wrapper"
+                style={{ justifyContent: 'space-between' }}
+            >
+                <Flex wrap="wrap" gap="small" >
+                    <Button
+                        type="default"
+                        icon={<SketchOutlined />}
+                        onClick={() => navigate('/mint-nft')}
+                    >
+                        Mint NFT
+                    </Button>
+                    <Button
+                        type="dashed"
+                        icon={<MoneyCollectOutlined />}
+                        onClick={() => navigate('/mint-erc20')}
+                    >
+                        Mint ERC20 token
+                    </Button>
+                    <Button
+                        type="primary"
+                        icon={<TagOutlined />}
+                        onClick={() => navigate('/auction')}
+                    >
+                        Start Auction
+                    </Button>
+                </Flex>
+
                 <Button
-                    type="default"
-                    icon={<SketchOutlined />}
-                    onClick={() => navigate('/mint-nft')}
+                    type="ghost"
+                    icon={<EyeOutlined />}
+                    onClick={() => navigate('/view-assets')}
                 >
-                    Mint NFT
-                </Button>
-                <Button
-                    type="dashed"
-                    icon={<MoneyCollectOutlined />}
-                    onClick={() => navigate('/mint-erc20')}
-                >
-                    Mint ERC20 token
-                </Button>
-                <Button
-                    type="primary"
-                    icon={<TagOutlined />}
-                    onClick={() => navigate('/auction')}
-                >
-                    Auction
+                    View My Assets
                 </Button>
             </Flex>
         </div>

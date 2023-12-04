@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useContractWrite, useContractRead } from 'wagmi'
 import { tokenizedVickeryAuctionABI, mockErc721ABI } from '../../generated';
-import Mint from '../mint';
+import Mint from '../mintNFT';
 import AuctionList from '../../components/auctionList';
 import NavBar from '../../components/navBar';
 

@@ -4,8 +4,10 @@ import { WagmiConfig, createConfig, configureChains, mainnet, sepolia } from 'wa
 import { alchemyProvider } from 'wagmi/providers/alchemy';
 import { publicProvider } from 'wagmi/providers/public';
 import Home from './pages/home';
-import Mint from './pages/mint';
+import MintNFT from './pages/mintNFT';
+import MintToken from './pages/mintToken';
 import { MetaMaskConnector } from 'wagmi/connectors/metaMask'
+import './App.css'
 
 const { chains, publicClient, webSocketPublicClient } = configureChains(
   [sepolia],
@@ -29,9 +31,9 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Home />}></Route>
-            <Route path="/mint-nft" element={<Mint />}></Route>
-            <Route path="/mint-erc20" element={<Mint />}></Route>
-            <Route path="/auction" element={<Mint />}></Route>
+            <Route path="/mint-nft" element={<MintNFT />}></Route>
+            <Route path="/mint-erc20" element={<MintToken />}></Route>
+            {/* <Route path="/auction" element={<Mint />}></Route> */}
           </Routes>
         </BrowserRouter>
       </div>
