@@ -1,13 +1,30 @@
 import React, { useState, useEffect } from 'react';
-import { Table, Badge } from 'antd';
+import { Table, Badge, Space, Tooltip, Avatar } from 'antd';
 import { useContractRead } from 'wagmi'
 import { tokenizedVickeryAuctionABI } from '../../generated';
-import { address_map } from '../../constants'
+import { address_map, tag_address } from '../../constants'
+import { QqOutlined } from '@ant-design/icons';
+import pic from '../../../src/random.png';
 
 export default function () {
     const [tableData, setTableData] = useState()
     const { auction_address } = address_map;
     const [loading, setLoading] = useState(true);
+    const handleBid = () => {
+
+    }
+    const handleReveal = () => {
+
+    }
+    const handleEnd = () => {
+
+    }
+    const formatAddress = (addr) => {
+        if (!addr) {
+            return '';
+        }
+        return `${addr.substring(0, 4)}...${addr.substring(addr.length - 6)}`;
+    };
     const columns = [
         {
             title: 'Index',
@@ -18,6 +35,60 @@ export default function () {
           title: 'Seller',
           dataIndex: 'seller',
           key: 'seller',
+          render: (text, record) => {
+            return (
+                <Tooltip title={text}>{formatAddress(text)}</Tooltip>
+            )
+          }
+        },
+        {
+            title: 'NFT type',
+            dataIndex: 'nftType',
+            key: 'nftType',
+            render: (tokenAddress) => {
+                let tokenName = "Unknown NFT";
+                for (const key in tag_address) {
+                    if (tag_address[key] === tokenAddress) {
+                        tokenName = key;
+                        break;
+                    }
+                }
+                return (
+                    <Space>
+                        {
+                            tokenName === 'QBT'?
+                            <Avatar size="small" icon={<QqOutlined />} />:
+                            <Avatar size="small" src={pic} />
+                        }
+                        <span>{tokenName}</span>
+                    </Space>
+                );
+            }
+        },
+        {
+            title: 'Token ID',
+            dataIndex: 'nftId',
+            key: 'nftId'
+        },
+        {
+            title: 'Payment Token',
+            dataIndex: 'erc20Token',
+            key: 'erc20Token',
+            render: (tokenAddress) => {
+                let tokenName = "Unknown Token";
+                for (const key in tag_address) {
+                    if (tag_address[key] === tokenAddress) {
+                        tokenName = key;
+                        break;
+                    }
+                }
+                return tokenName;
+            }
+        },
+        {
+            title: 'Reserve Price',
+            dataIndex: 'reservePrice',
+            key: 'reservePrice'
         },
         {
           title: 'Auction Start time',
@@ -60,6 +131,11 @@ export default function () {
             }
         },
         {
+            title: 'Bid Count',
+            dataIndex: 'numBids',
+            key: 'numBids'
+        },
+        {
             title: 'Status',
             width: 150,
             render: (record) => {
@@ -85,7 +161,44 @@ export default function () {
                 }
                 return <Badge status={status} text={text} />;
             }
-        }         
+        },
+        {
+            title: 'Action',
+            render: (text, record, index) => {
+                const currentTime = Math.floor(Date.now() / 1000);
+                let isBidEnabled, isRevealEnabled, isEndEnabled;
+        
+                if (currentTime < record.startTime) {
+                    // 拍卖未开始
+                    isBidEnabled = false;
+                    isRevealEnabled = false;
+                    isEndEnabled = false;
+                } else if (currentTime >= record.startTime && currentTime < record.endOfBiddingPeriod) {
+                    // 拍卖正在进行
+                    isBidEnabled = true;
+                    isRevealEnabled = false;
+                    isEndEnabled = false;
+                } else if (currentTime >= record.endOfBiddingPeriod && currentTime < record.endOfRevealPeriod) {
+                    // 揭示阶段
+                    isBidEnabled = false;
+                    isRevealEnabled = true;
+                    isEndEnabled = false;
+                } else {
+                    // 拍卖已结束
+                    isBidEnabled = false;
+                    isRevealEnabled = false;
+                    isEndEnabled = true;
+                }
+        
+                return (
+                    <Space size="middle">
+                        <a onClick={handleBid} disabled={!isBidEnabled}>Bid</a>
+                        <a onClick={handleReveal} disabled={!isRevealEnabled}>Reveal</a>
+                        <a onClick={handleEnd} disabled={!isEndEnabled}>End</a>
+                    </Space>
+                );
+            },
+        }          
     ];
     useContractRead({
         address: auction_address,
@@ -102,6 +215,9 @@ export default function () {
                 const indexNumber = Number(auction.index);
                 const numUnrevealedBids = Number(auction.numUnrevealedBids);
                 const secondHighestBid = Number(auction.secondHighestBid);
+                const reservePrice = Number(auction.reservePrice);
+                const nftId = Number(auction.nftId);
+                const numBids = Number(auction.numBids);
                 const currentTime = Math.floor(Date.now() / 1000);
                 return {
                     ...auction,
@@ -109,11 +225,15 @@ export default function () {
                     index: indexNumber,
                     numUnrevealedBids,
                     secondHighestBid,
+                    reservePrice,
+                    numBids,
+                    nftId,
                     key: index + 1, // 或使用其他生成的唯一标识符
                     timeUntilRevealEnds: Math.max(0, auction.endOfRevealPeriod - currentTime),
                     timeUntilAuctionEnds: Math.max(0, auction.endOfBiddingPeriod - currentTime)
                 };
             });
+            console.log(formattedData)
             setTableData(formattedData);
             setLoading(false);
         }
@@ -136,7 +256,7 @@ export default function () {
 
     const convertTimeStampToDate = (timeStamp) => {
         const date = new Date(timeStamp * 1000);
-        return date.toISOString().replace('T', ' ').substring(0, 19);
+        return date.toLocaleString();
     }
     function renderCountDown(seconds) {
         const days = Math.floor(seconds / (3600 * 24));

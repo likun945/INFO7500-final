@@ -30,13 +30,18 @@ contract TokenizedVickeryAuction {
         uint32 endOfBiddingPeriod;
         uint32 endOfRevealPeriod;
         // =====================
-        uint64 numUnrevealedBids;
+        uint64 numBids;
+        // uint64 numUnrevealedBids;
         uint96 highestBid;
         uint96 secondHighestBid;
         // =====================
         address highestBidder;
         uint64 index;
         address erc20Token;
+        // =====================
+        uint96 reservePrice;
+        address nftType; 
+        uint256 nftId;
     }
 
     struct AuctionKey {
@@ -67,7 +72,6 @@ contract TokenizedVickeryAuction {
     function initialize() public virtual {
         // empty now
     }
-
     /// @notice Creates an auction for the given ERC721 asset with the given
     ///         auction parameters.
     /// @param tokenContract The address of the ERC721 contract for the asset
@@ -101,25 +105,26 @@ contract TokenizedVickeryAuction {
         require(bidPeriod > 0, "Bid period must be greater than zero");
         require(revealPeriod > 0, "Reveal period must be greater than zero");
         require(reservePrice > 0, "Reserve price must be greater than zero");
-
         IERC721 nft = IERC721(tokenContract);
         require(
             nft.ownerOf(tokenId) == msg.sender,
             "Caller is not the token owner"
         );
         nft.transferFrom(msg.sender, address(this), tokenId);
-
         auctions[tokenContract][tokenId] = Auction({
             seller: msg.sender,
             startTime: startTime,
             endOfBiddingPeriod: startTime + bidPeriod,
             endOfRevealPeriod: startTime + bidPeriod + revealPeriod,
-            numUnrevealedBids: 0,
+            numBids: 0,
             highestBid: reservePrice,
             secondHighestBid: reservePrice,
             highestBidder: address(0),
             index: auctions[tokenContract][tokenId].index + 1,
-            erc20Token: erc20Token
+            erc20Token: erc20Token,
+            reservePrice: reservePrice,
+            nftType: tokenContract,
+            nftId: tokenId
         });
         auctionKeys.push(AuctionKey({
             tokenContract: tokenContract,
@@ -162,6 +167,8 @@ contract TokenizedVickeryAuction {
         Bid storage bid = bids[tokenContract][tokenId][auction.index][
             msg.sender
         ];
+        auction.numBids += 1; 
+        // auction.numUnrevealedBids += 1;
         bid.commitment = commitment;
         bid.collateral = uint96(erc20Tokens);
     }
@@ -222,6 +229,7 @@ contract TokenizedVickeryAuction {
         } else if (bidValue > auction.secondHighestBid) {
             auction.secondHighestBid = bidValue;
         }
+        // auction.numUnrevealedBids -= 1; 
     }
 
     /// @notice Ends an active auction. Can only end an auction if the bid reveal

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Statistic, Flex, Spin, List, Image, Col, Segmented, Row, Avatar } from 'antd';
+import { Button, Statistic, Spin, List, Image, Col, Segmented, Row, Avatar } from 'antd';
 import Web3 from 'web3';
 import { useContractRead, useAccount } from 'wagmi'
 import { mockErc20ABI, boardGameNftABI, mockErc721ABI } from '../../generated';
