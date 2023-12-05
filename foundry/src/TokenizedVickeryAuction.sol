@@ -168,7 +168,6 @@ contract TokenizedVickeryAuction {
             msg.sender
         ];
         auction.numBids += 1; 
-        // auction.numUnrevealedBids += 1;
         bid.commitment = commitment;
         bid.collateral = uint96(erc20Tokens);
     }
@@ -221,7 +220,17 @@ contract TokenizedVickeryAuction {
             bid.collateral >= bidValue,
             "Collateral must be at least equal to the bid value"
         );
-
+        console.logBytes20(bytes20(
+                    keccak256(
+                        abi.encode(
+                            "test",
+                            2 ether,
+                            "0x2f698CB14D8150785AcCbEd9d9544999631ec0dF",
+                            4,
+                            1
+                        )
+                    )
+        ));
         if (bidValue > auction.highestBid) {
             auction.secondHighestBid = auction.highestBid;
             auction.highestBid = bidValue;

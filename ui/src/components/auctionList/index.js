@@ -242,11 +242,11 @@ export default function () {
                     numBids,
                     nftId,
                     key: index + 1, // 或使用其他生成的唯一标识符
-                    timeUntilRevealEnds: Math.max(0, auction.endOfRevealPeriod - currentTime),
-                    timeUntilAuctionEnds: Math.max(0, auction.endOfBiddingPeriod - currentTime)
+                    timeUntilRevealEnds: Math.max(0, auction.endOfBiddingPeriod - currentTime),
+                    timeUntilAuctionEnds: Math.max(0, auction.endOfRevealPeriod - currentTime)
                 };
             });
-            // console.log(formattedData)
+            console.log(formattedData)
             setTableData(formattedData);
             setLoading(false);
         }

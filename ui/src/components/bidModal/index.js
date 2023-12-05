@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Form, InputNumber, Button, message, Select, Option } from 'antd';
 import { useSignMessage, useContractWrite } from 'wagmi'
-import { verifyMessage } from 'ethers';
+// import { verifyMessage } from 'ethers';
 import { LKT_CONTRACT, AUCTION_CONTRACT, address_map } from '../../constants';
 import Web3 from 'web3';
-
+import { generateCommitment } from '../../utils';
+// import { ethers } from 'ethers';
 const options = [
     {
         "id": 0,
@@ -22,12 +23,32 @@ const BidModal = ({ isModalVisible, onClose, reservePrice, auctionInfo }) => {
     const [approveLoading, setApproveLoading] = useState(false);
     const [commitment, setCommitment] = useState('');
     const [payment, setPayment] = useState(0);
-    const { auction_address } = address_map;
+    const { auction_address, BGT_address, QBT_address } = address_map;
     const { toWei } = Web3.utils;
+    const nounce = "test";
+    // const c = generateCommitment(
+    //     "test",
+    //     toWei(2, "ether"),
+    //     "0x2f698CB14D8150785AcCbEd9d9544999631ec0dF",
+    //     4,
+    //     1
+    // )
+    // console.log(c)
+    const localGenerateCommitment = () => {
+        const commitment = generateCommitment(
+            nounce,
+            toWei(bidPrice, "ether"),
+            auctionInfo.nftType, 
+            auctionInfo.nftId, 
+            auctionInfo.index
+        )
+        setCommitment(commitment);
+        return commitment;
+    }
     const { signMessage } = useSignMessage({
         onSuccess(data, variables) {
-            setCommitment(data);
-            handleCommitBid(data);
+            const result_commitment = localGenerateCommitment();
+            handleCommitBid(result_commitment);
         },
     });
     const { write: commitBid } = useContractWrite({
@@ -35,7 +56,7 @@ const BidModal = ({ isModalVisible, onClose, reservePrice, auctionInfo }) => {
         functionName: 'commitBid',
         onSuccess(data) {
             showSuccess(data)
-            showSuccess2(commitment);
+            showBidMessage(commitment);
             onClose();
         }
     })
@@ -65,13 +86,6 @@ const BidModal = ({ isModalVisible, onClose, reservePrice, auctionInfo }) => {
             content: `The Transacation hash is ${data.hash}`
         });
     }
-    const showSuccess2 = (data) => {
-        messageApi.open({
-            type: 'success',
-            content: `Successful! Your commitment is ${data}`,
-            duration: 5
-        });
-    }
     const handleOk = async () => {
         setIsLoading(true);
         signMessage({
@@ -87,9 +101,9 @@ const BidModal = ({ isModalVisible, onClose, reservePrice, auctionInfo }) => {
         setBidPrice(value);
     };
 
-    const showMessage = (commitment) => {
+    const showBidMessage = (commitment) => {
         messageApi.success({
-            content: `Bid successful! Your commitment is ${commitment}. Please keep it safe.`,
+            content: `Bid successful! Your nonce is ${nounce}. Please keep it safe. Commitment : (${commitment})`,
             duration: 5
         });
     };
@@ -99,14 +113,15 @@ const BidModal = ({ isModalVisible, onClose, reservePrice, auctionInfo }) => {
             args: [auction_address, toWei(bidPrice, "ether")]
         })
     }
-    const handleCommitBid = (commitment) => {
+    const handleCommitBid = (result_commitment) => {
         if (auctionInfo) {
             const args = [
                 auctionInfo.nftType,
                 auctionInfo.nftId,
-                '0x1234567890abcdef1234567890abcdef12345678',
+                result_commitment,
                 toWei(bidPrice, "ether")
             ]
+            console.log(args);
             commitBid({ args })
         } else {
             console.error('error');
