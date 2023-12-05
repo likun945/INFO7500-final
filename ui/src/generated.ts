@@ -2197,6 +2197,55 @@ export const tokenizedVickeryAuctionABI = [
     name: 'AuctionEnded',
   },
   {
+    type: 'event',
+    anonymous: false,
+    inputs: [
+      {
+        name: 'commitment',
+        internalType: 'bytes32',
+        type: 'bytes32',
+        indexed: true,
+      },
+      {
+        name: 'calculatedCommitment',
+        internalType: 'bytes32',
+        type: 'bytes32',
+        indexed: false,
+      },
+      {
+        name: 'nonce',
+        internalType: 'bytes32',
+        type: 'bytes32',
+        indexed: false,
+      },
+      {
+        name: 'bidValue',
+        internalType: 'uint96',
+        type: 'uint96',
+        indexed: false,
+      },
+      {
+        name: 'tokenContract',
+        internalType: 'address',
+        type: 'address',
+        indexed: false,
+      },
+      {
+        name: 'tokenId',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+      {
+        name: 'auctionIndex',
+        internalType: 'uint256',
+        type: 'uint256',
+        indexed: false,
+      },
+    ],
+    name: 'BidDetails',
+  },
+  {
     stateMutability: 'view',
     type: 'function',
     inputs: [
@@ -9514,6 +9563,22 @@ export function useTokenizedVickeryAuctionAuctionEndedEvent(
     typeof tokenizedVickeryAuctionABI,
     'AuctionEnded'
   >)
+}
+
+/**
+ * Wraps __{@link useContractEvent}__ with `abi` set to __{@link tokenizedVickeryAuctionABI}__ and `eventName` set to `"BidDetails"`.
+ */
+export function useTokenizedVickeryAuctionBidDetailsEvent(
+  config: Omit<
+    UseContractEventConfig<typeof tokenizedVickeryAuctionABI, 'BidDetails'>,
+    'abi' | 'eventName'
+  > = {} as any,
+) {
+  return useContractEvent({
+    abi: tokenizedVickeryAuctionABI,
+    eventName: 'BidDetails',
+    ...config,
+  } as UseContractEventConfig<typeof tokenizedVickeryAuctionABI, 'BidDetails'>)
 }
 
 /**

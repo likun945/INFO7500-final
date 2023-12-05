@@ -5,6 +5,7 @@ import { tokenizedVickeryAuctionABI } from '../../generated';
 import { address_map, tag_address } from '../../constants'
 import { QqOutlined } from '@ant-design/icons';
 import BidModal from '../../components/bidModal';
+import RevealModal from '../../components/revealModal';
 import pic from '../../../src/random.png';
 
 export default function () {
@@ -12,6 +13,7 @@ export default function () {
     const { auction_address } = address_map;
     const [loading, setLoading] = useState(true);
     const [isModalVisible, setIsModalVisible] = useState(false);
+    const [revealModalVisible, setRevealModalVisible] = useState(false);
     const [reservePrice, setReservePrice] = useState(0);
     const [auctionInfo, setAuctionInfo] = useState({});
     const showModal = () => {
@@ -21,13 +23,20 @@ export default function () {
     const handleClose = () => {
         setIsModalVisible(false);
     };
+    const showRevealModal = () => {
+        setRevealModalVisible(true);
+    }
+    const handleRevealClose = () => {
+        setRevealModalVisible(false);
+    }
     const handleBid = (record) => {
         setReservePrice(record.reservePrice)
         setAuctionInfo(record);
         showModal();
     }
-    const handleReveal = () => {
-
+    const handleReveal = (record) => {
+        setAuctionInfo(record);
+        showRevealModal();
     }
     const handleEnd = () => {
 
@@ -206,7 +215,7 @@ export default function () {
                 return (
                     <Space size="middle">
                         <a onClick={handleBid.bind(this, record)} disabled={!isBidEnabled}>Bid</a>
-                        <a onClick={handleReveal} disabled={!isRevealEnabled}>Reveal</a>
+                        <a onClick={handleReveal.bind(this, record)} disabled={!isRevealEnabled}>Reveal</a>
                         <a onClick={handleEnd} disabled={!isEndEnabled}>End</a>
                     </Space>
                 );
@@ -285,12 +294,23 @@ export default function () {
     return (
         <div>
             <Table loading={loading} columns={columns} dataSource={tableData}></Table>
-            <BidModal
-                auctionInfo={auctionInfo}
-                reservePrice={reservePrice}
-                isModalVisible={isModalVisible}
-                onClose={handleClose}
-            />
+            {
+                isModalVisible &&
+                <BidModal
+                    auctionInfo={auctionInfo}
+                    reservePrice={reservePrice}
+                    isModalVisible={isModalVisible}
+                    onClose={handleClose}
+                />
+            }
+            {
+                revealModalVisible &&
+                <RevealModal
+                    isVisible={revealModalVisible}
+                    auctionInfo={auctionInfo}
+                    onClose={handleRevealClose}
+                />
+            }
         </div>
     )
 }

@@ -23,17 +23,10 @@ const BidModal = ({ isModalVisible, onClose, reservePrice, auctionInfo }) => {
     const [approveLoading, setApproveLoading] = useState(false);
     const [commitment, setCommitment] = useState('');
     const [payment, setPayment] = useState(0);
-    const { auction_address, BGT_address, QBT_address } = address_map;
+    const { auction_address } = address_map;
     const { toWei } = Web3.utils;
     const nounce = "test";
-    // const c = generateCommitment(
-    //     "test",
-    //     toWei(2, "ether"),
-    //     "0x2f698CB14D8150785AcCbEd9d9544999631ec0dF",
-    //     4,
-    //     1
-    // )
-    // console.log(c)
+
     const localGenerateCommitment = () => {
         const commitment = generateCommitment(
             nounce,
@@ -121,14 +114,11 @@ const BidModal = ({ isModalVisible, onClose, reservePrice, auctionInfo }) => {
                 result_commitment,
                 toWei(bidPrice, "ether")
             ]
-            console.log(args);
+            // console.log(args);
             commitBid({ args })
         } else {
             console.error('error');
         }
-    }
-    const handleChoose = (e) => {
-        console.log(e)
     }
     useEffect(() => {
         if (reservePrice > 0) {
@@ -150,8 +140,7 @@ const BidModal = ({ isModalVisible, onClose, reservePrice, auctionInfo }) => {
             {contextHolder}
             <Form layout="vertical">
                 <Form.Item label="Payment Token">
-                    <Select placeholder="Choose payment token" value={payment} defaultValue={payment}
-                        onChange={handleChoose}>
+                    <Select placeholder="Choose payment token" value={payment} defaultValue={payment}>
                         {
                             options.map((option, index) => (
                                 <Select.Option key={option.id} value={option.id}>{`${option.tag}(${option.name})`}</Select.Option>

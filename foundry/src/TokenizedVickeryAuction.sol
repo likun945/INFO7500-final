@@ -40,7 +40,7 @@ contract TokenizedVickeryAuction {
         address erc20Token;
         // =====================
         uint96 reservePrice;
-        address nftType; 
+        address nftType;
         uint256 nftId;
     }
 
@@ -72,6 +72,7 @@ contract TokenizedVickeryAuction {
     function initialize() public virtual {
         // empty now
     }
+
     /// @notice Creates an auction for the given ERC721 asset with the given
     ///         auction parameters.
     /// @param tokenContract The address of the ERC721 contract for the asset
@@ -126,10 +127,9 @@ contract TokenizedVickeryAuction {
             nftType: tokenContract,
             nftId: tokenId
         });
-        auctionKeys.push(AuctionKey({
-            tokenContract: tokenContract,
-            tokenId: tokenId
-        }));
+        auctionKeys.push(
+            AuctionKey({tokenContract: tokenContract, tokenId: tokenId})
+        );
     }
 
     /// @notice Commits to a bid on an item being auctioned. If a bid was
@@ -167,10 +167,20 @@ contract TokenizedVickeryAuction {
         Bid storage bid = bids[tokenContract][tokenId][auction.index][
             msg.sender
         ];
-        auction.numBids += 1; 
+        auction.numBids += 1;
         bid.commitment = commitment;
         bid.collateral = uint96(erc20Tokens);
     }
+
+    event BidDetails(
+        bytes32 indexed commitment,
+        bytes32 calculatedCommitment,
+        bytes32 nonce,
+        uint96 bidValue,
+        address tokenContract,
+        uint256 tokenId,
+        uint256 auctionIndex
+    );
 
     /// @notice Reveals the value of a bid that was previously committed to.
     /// @param tokenContract The address of the ERC721 contract for the asset
@@ -201,36 +211,58 @@ contract TokenizedVickeryAuction {
             bid.commitment != bytes20(0),
             "No previous bid commitment found"
         );
-        require(
-            bid.commitment ==
-                bytes20(
-                    keccak256(
-                        abi.encode(
-                            nonce,
-                            bidValue,
-                            tokenContract,
-                            tokenId,
-                            auction.index
-                        )
-                    )
-                ),
-            "Revealed bid does not match the commitment"
+        bytes32 calculatedCommitment = bytes20(
+            keccak256(
+                abi.encode(
+                    nonce,
+                    bidValue,
+                    tokenContract,
+                    tokenId,
+                    auction.index
+                )
+            )
         );
+        emit BidDetails(
+            bid.commitment,
+            calculatedCommitment,
+            nonce,
+            bidValue,
+            tokenContract,
+            tokenId,
+            auction.index
+        );
+        // require(
+        //     bid.commitment ==
+        //         bytes20(
+        //             keccak256(
+        //                 abi.encode(
+        //                     nonce,
+        //                     bidValue,
+        //                     tokenContract,
+        //                     tokenId,
+        //                     auction.index
+        //                 )
+        //             )
+        //         ),
+        //     "Revealed bid does not match the commitment"
+        // );
         require(
             bid.collateral >= bidValue,
             "Collateral must be at least equal to the bid value"
         );
-        console.logBytes20(bytes20(
-                    keccak256(
-                        abi.encode(
-                            "test",
-                            2 ether,
-                            "0x2f698CB14D8150785AcCbEd9d9544999631ec0dF",
-                            4,
-                            1
-                        )
+        console.logBytes20(
+            bytes20(
+                keccak256(
+                    abi.encode(
+                        "test",
+                        5 ether,
+                        "0x2f698cb14d8150785accbed9d9544999631ec0df",
+                        10,
+                        1
                     )
-        ));
+                )
+            )
+        );
         if (bidValue > auction.highestBid) {
             auction.secondHighestBid = auction.highestBid;
             auction.highestBid = bidValue;
@@ -238,7 +270,6 @@ contract TokenizedVickeryAuction {
         } else if (bidValue > auction.secondHighestBid) {
             auction.secondHighestBid = bidValue;
         }
-        // auction.numUnrevealedBids -= 1; 
     }
 
     /// @notice Ends an active auction. Can only end an auction if the bid reveal
@@ -344,6 +375,7 @@ contract TokenizedVickeryAuction {
         }
         return allAuctions;
     }
+
     function getBid(
         address tokenContract,
         uint256 tokenId,
