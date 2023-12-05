@@ -4,14 +4,27 @@ import { useContractRead } from 'wagmi'
 import { tokenizedVickeryAuctionABI } from '../../generated';
 import { address_map, tag_address } from '../../constants'
 import { QqOutlined } from '@ant-design/icons';
+import BidModal from '../../components/bidModal';
 import pic from '../../../src/random.png';
 
 export default function () {
     const [tableData, setTableData] = useState()
     const { auction_address } = address_map;
     const [loading, setLoading] = useState(true);
-    const handleBid = () => {
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [reservePrice, setReservePrice] = useState(0);
+    const [auctionInfo, setAuctionInfo] = useState({});
+    const showModal = () => {
+        setIsModalVisible(true);
+    };
 
+    const handleClose = () => {
+        setIsModalVisible(false);
+    };
+    const handleBid = (record) => {
+        setReservePrice(record.reservePrice)
+        setAuctionInfo(record);
+        showModal();
     }
     const handleReveal = () => {
 
@@ -32,14 +45,14 @@ export default function () {
             key: 'key'
         },
         {
-          title: 'Seller',
-          dataIndex: 'seller',
-          key: 'seller',
-          render: (text, record) => {
-            return (
-                <Tooltip title={text}>{formatAddress(text)}</Tooltip>
-            )
-          }
+            title: 'Seller',
+            dataIndex: 'seller',
+            key: 'seller',
+            render: (text, record) => {
+                return (
+                    <Tooltip title={text}>{formatAddress(text)}</Tooltip>
+                )
+            }
         },
         {
             title: 'NFT type',
@@ -56,9 +69,9 @@ export default function () {
                 return (
                     <Space>
                         {
-                            tokenName === 'QBT'?
-                            <Avatar size="small" icon={<QqOutlined />} />:
-                            <Avatar size="small" src={pic} />
+                            tokenName === 'QBT' ?
+                                <Avatar size="small" icon={<QqOutlined />} /> :
+                                <Avatar size="small" src={pic} />
                         }
                         <span>{tokenName}</span>
                     </Space>
@@ -91,13 +104,13 @@ export default function () {
             key: 'reservePrice'
         },
         {
-          title: 'Auction Start time',
-          dataIndex: 'startTime',
-          key: 'startTime',
-          render: (timeStamp) => <span>{convertTimeStampToDate(timeStamp)}</span>
+            title: 'Auction Start time',
+            dataIndex: 'startTime',
+            key: 'startTime',
+            render: (timeStamp) => <span>{convertTimeStampToDate(timeStamp)}</span>
         },
         {
-            title:'Reveal Time',
+            title: 'Reveal Time',
             dataIndex: 'endOfRevealPeriod',
             key: 'endOfRevealPeriod',
             render: (timeStamp) => <span>{convertTimeStampToDate(timeStamp)}</span>
@@ -109,10 +122,10 @@ export default function () {
             render: renderCountDown
         },
         {
-          title: 'Auction End Time',
-          dataIndex: 'endOfBiddingPeriod',
-          key: 'endOfBiddingPeriod',
-          render: (timeStamp) => <span>{convertTimeStampToDate(timeStamp)}</span>
+            title: 'Auction End Time',
+            dataIndex: 'endOfBiddingPeriod',
+            key: 'endOfBiddingPeriod',
+            render: (timeStamp) => <span>{convertTimeStampToDate(timeStamp)}</span>
         },
         {
             title: 'Time to Auction Close',
@@ -141,7 +154,7 @@ export default function () {
             render: (record) => {
                 const currentTime = Math.floor(Date.now() / 1000);
                 let status, text;
-        
+
                 if (currentTime < record.startTime) {
                     // 拍卖未开始
                     status = "default";
@@ -167,7 +180,7 @@ export default function () {
             render: (text, record, index) => {
                 const currentTime = Math.floor(Date.now() / 1000);
                 let isBidEnabled, isRevealEnabled, isEndEnabled;
-        
+
                 if (currentTime < record.startTime) {
                     // 拍卖未开始
                     isBidEnabled = false;
@@ -189,16 +202,16 @@ export default function () {
                     isRevealEnabled = false;
                     isEndEnabled = true;
                 }
-        
+
                 return (
                     <Space size="middle">
-                        <a onClick={handleBid} disabled={!isBidEnabled}>Bid</a>
+                        <a onClick={handleBid.bind(this, record)} disabled={!isBidEnabled}>Bid</a>
                         <a onClick={handleReveal} disabled={!isRevealEnabled}>Reveal</a>
                         <a onClick={handleEnd} disabled={!isEndEnabled}>End</a>
                     </Space>
                 );
             },
-        }          
+        }
     ];
     useContractRead({
         address: auction_address,
@@ -207,7 +220,7 @@ export default function () {
         isRefetching: true,
         staleTime: 2000,
         onSuccess(data) {
-            if(!data) {
+            if (!data) {
                 return;
             }
             const formattedData = data.map((auction, index) => {
@@ -233,14 +246,14 @@ export default function () {
                     timeUntilAuctionEnds: Math.max(0, auction.endOfBiddingPeriod - currentTime)
                 };
             });
-            console.log(formattedData)
+            // console.log(formattedData)
             setTableData(formattedData);
             setLoading(false);
         }
     })
     useEffect(() => {
         const updateCountdown = () => {
-            if(tableData) {
+            if (tableData) {
                 const newTableData = tableData.map(auction => ({
                     ...auction,
                     timeUntilAuctionEnds: Math.max(auction.timeUntilAuctionEnds - 1, 0),
@@ -251,7 +264,7 @@ export default function () {
         };
 
         const interval = setInterval(updateCountdown, 1000);
-        return () => clearInterval(interval); 
+        return () => clearInterval(interval);
     }, [tableData]);
 
     const convertTimeStampToDate = (timeStamp) => {
@@ -272,6 +285,12 @@ export default function () {
     return (
         <div>
             <Table loading={loading} columns={columns} dataSource={tableData}></Table>
+            <BidModal
+                auctionInfo={auctionInfo}
+                reservePrice={reservePrice}
+                isModalVisible={isModalVisible}
+                onClose={handleClose}
+            />
         </div>
     )
 }
