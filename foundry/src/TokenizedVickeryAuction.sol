@@ -49,12 +49,13 @@ contract TokenizedVickeryAuction {
         uint256 tokenId;
     }
     AuctionKey[] private auctionKeys;
-
+    AuctionKey[] private endedAuctionKeys;
     /// @param commitment The hash commitment of a bid value.
     /// @param collateral The amount of collateral backing the bid.
     struct Bid {
         bytes20 commitment;
         uint96 collateral;
+        bool isRevealed;
     }
 
     /// @notice A mapping storing auction parameters and state, indexed by
@@ -211,6 +212,7 @@ contract TokenizedVickeryAuction {
             bid.commitment != bytes20(0),
             "No previous bid commitment found"
         );
+        require(!bid.isRevealed, "Bid has already been revealed");
         bytes32 calculatedCommitment = bytes20(
             keccak256(
                 abi.encode(
@@ -270,6 +272,7 @@ contract TokenizedVickeryAuction {
         } else if (bidValue > auction.secondHighestBid) {
             auction.secondHighestBid = bidValue;
         }
+        bid.isRevealed = true;
     }
 
     /// @notice Ends an active auction. Can only end an auction if the bid reveal
@@ -319,6 +322,17 @@ contract TokenizedVickeryAuction {
             );
 
             emit AuctionEnded(tokenContract, tokenId, address(0), 0);
+        }
+        // 将拍卖从进行中的列表移动到已结束的列表
+        for (uint256 i = 0; i < auctionKeys.length; i++) {
+            if (
+                auctionKeys[i].tokenContract == tokenContract &&
+                auctionKeys[i].tokenId == tokenId
+            ) {
+                endedAuctionKeys.push(auctionKeys[i]);
+                removeAuctionKey(i);
+                break;
+            }
         }
     }
 
@@ -374,6 +388,21 @@ contract TokenizedVickeryAuction {
             allAuctions[i] = auctions[key.tokenContract][key.tokenId];
         }
         return allAuctions;
+    }
+
+    function getEndedAuctions() public view returns (Auction[] memory) {
+        Auction[] memory endedAuctions = new Auction[](endedAuctionKeys.length);
+        for (uint256 i = 0; i < endedAuctionKeys.length; i++) {
+            AuctionKey memory key = endedAuctionKeys[i];
+            endedAuctions[i] = auctions[key.tokenContract][key.tokenId];
+        }
+        return endedAuctions;
+    }
+
+    function removeAuctionKey(uint256 index) internal {
+        require(index < auctionKeys.length, "Index out of bounds");
+        auctionKeys[index] = auctionKeys[auctionKeys.length - 1];
+        auctionKeys.pop();
     }
 
     function getBid(
