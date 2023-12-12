@@ -216,7 +216,7 @@ contract TokenizedVickeryAuctionTest is Test {
         vm.warp(block.timestamp + 61);
         auction.commitBid(address(nft), tokenId, commitment, collateral);
 
-        (bytes20 bid_commitment, uint96 bid_collateral) = auction.getBid(
+        (bytes20 bid_commitment, uint96 bid_collateral,) = auction.getBid(
             address(nft),
             tokenId,
             1,
@@ -546,7 +546,7 @@ contract TokenizedVickeryAuctionTest is Test {
         vm.startPrank(bidder1);
         auction.withdrawCollateral(address(nft), tokenId, auctionIndex);
         uint256 finalERC20Balance = IERC20(address(token)).balanceOf(bidder1);
-        (, uint96 bid_collateral) = auction.getBid(
+        (, uint96 bid_collateral,) = auction.getBid(
             address(nft),
             tokenId,
             auctionIndex,

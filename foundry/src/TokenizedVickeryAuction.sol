@@ -410,9 +410,9 @@ contract TokenizedVickeryAuction {
         uint256 tokenId,
         uint64 auctionIndex,
         address bidder
-    ) public view returns (bytes20 commitment, uint96 collateral) {
+    ) public view returns (bytes20 commitment, uint96 collateral, bool isRevealed) {
         Bid storage bid = bids[tokenContract][tokenId][auctionIndex][bidder];
-        return (bid.commitment, bid.collateral);
+        return (bid.commitment, bid.collateral, bid.isRevealed);
     }
 
     event AuctionEnded(
