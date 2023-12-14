@@ -4,7 +4,7 @@ pragma solidity ^0.8.13;
 import {Test} from "forge-std/Test.sol";
 import {TokenizedVickeryAuctionV2} from "../src/TokenizedVickeryAuctionV2.sol";
 import {MockERC20} from "../src/MockERC20.sol";
-import {MockERC721} from "../src/MockERC721.sol";
+import {AnimalNFT} from "../src/AnimalNFT.sol";
 import "openzeppelin-contracts/contracts/token/ERC721/IERC721.sol";
 import "openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
 import "forge-std/console.sol";
@@ -12,7 +12,7 @@ import "forge-std/console.sol";
 contract TokenizedVickeryAuctionV2Test is Test {
     TokenizedVickeryAuctionV2 public auctionV2;
     MockERC20 public token;
-    MockERC721 public nft;
+    AnimalNFT public nft;
     address blacklistedSeller = vm.addr(3);
     address seller = vm.addr(2);
     uint96 reservePrice = 100;
@@ -26,7 +26,7 @@ contract TokenizedVickeryAuctionV2Test is Test {
     function setUp() public {
         auctionV2 = new TokenizedVickeryAuctionV2();
         token = new MockERC20("MockToken", "MTK");
-        nft = new MockERC721("MockNFT", "MNFT");
+        nft = new AnimalNFT("MockNFT", "MNFT");
         nft.mint(address(seller));
         nft.mint(address(blacklistedSeller));
         vm.startPrank(seller);
