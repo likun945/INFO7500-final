@@ -13,10 +13,10 @@ contract AnimalNFT is ERC721 {
     }
 
     function mint(address to) public {
+        _tokenIdCounter++; 
         uint256 tokenId = _tokenIdCounter;
         _safeMint(to, tokenId);
         _ownedTokens[to].push(tokenId);
-        _tokenIdCounter++;
     }
 
     function tokensOfOwner(address owner) public view returns (uint256[] memory) {
@@ -48,6 +48,6 @@ contract AnimalNFT is ERC721 {
     function tokenURI(uint256 tokenId) public view override returns (string memory) {
         require(_exists(tokenId), "ERC721Metadata: URI query for nonexistent token");
 
-        return string(abi.encodePacked(baseTokenURI, tokenId, ".json?alt=media"));
+        return string(abi.encodePacked(baseTokenURI, Strings.toString(tokenId), ".json?alt=media"));
     }
 }
