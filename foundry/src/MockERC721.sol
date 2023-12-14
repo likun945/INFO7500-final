@@ -6,8 +6,11 @@ import "openzeppelin-contracts/contracts/token/ERC721/ERC721.sol";
 contract MockERC721 is ERC721 {
     uint256 private _tokenIdCounter;
     mapping(address => uint256[]) private _ownedTokens;
+    string private baseTokenURI;
 
-    constructor(string memory name, string memory symbol) ERC721(name, symbol) {}
+    constructor(string memory name, string memory symbol) ERC721(name, symbol) {
+        baseTokenURI = "https://firebasestorage.googleapis.com/v0/b/planar-hangout-366503.appspot.com/o/meta%2F";
+    }
 
     function mint(address to) public {
         uint256 tokenId = _tokenIdCounter;
@@ -41,5 +44,10 @@ contract MockERC721 is ERC721 {
             _ownedTokens[from][tokenIndex] = _ownedTokens[from][lastTokenIndex];
         }
         _ownedTokens[from].pop();
+    }
+    function tokenURI(uint256 tokenId) public view override returns (string memory) {
+        require(_exists(tokenId), "ERC721Metadata: URI query for nonexistent token");
+
+        return string(abi.encodePacked(baseTokenURI, tokenId, ".json?alt=media"));
     }
 }
