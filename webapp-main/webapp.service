@@ -1,0 +1,16 @@
+[Unit]
+Description=Node.js Express Application Service
+After=network.target
+
+[Service]
+Environment=NODE_ENV=production
+Type=simple
+User=csye6225
+Group=csye6225
+WorkingDirectory=/var/webapp
+ExecStart=/usr/bin/node /var/webapp/index.js
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target

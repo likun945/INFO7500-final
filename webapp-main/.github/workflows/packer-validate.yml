@@ -1,0 +1,42 @@
+name: Packer Continuous Integration
+
+on:
+  pull_request_target:
+    branches: [ "main" ]
+  push:
+    branches: [ "main" ]
+      
+env:
+  PRODUCT_VERSION: "1.8.6" # or: "latest"
+  
+jobs:
+  packer-ci:
+    name: Packer CI
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      
+      - name: Setup `packer`
+        uses: hashicorp/setup-packer@main
+        id: setup
+        with:
+          version: ${{ env.PRODUCT_VERSION }}
+
+
+      - name: Run packer fmt
+        run: |
+          packer fmt -check -diff packer-template.pkr.hcl
+        id: fmt
+
+      - name: Fail if packer fmt made changes
+        if: steps.fmt.outputs.exitcode != '0'
+        run: |
+          echo "Packer fmt command made changes. Please run 'packer fmt packer-template.json' locally and commit the changes."
+          exit 1
+
+      - name: Run packer validate
+        run: packer validate packer-template.pkr.hcl

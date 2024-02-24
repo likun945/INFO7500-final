@@ -1,0 +1,54 @@
+{
+  "variables": {
+    "gcp_project_id": "csye-413919",
+    "source_image_family": "centos-8",
+    "machine_type": "n1-standard-1",
+    "region": "us-west1",
+    "ssh_username": "packer"
+  },
+  "builders": [
+    {
+      "type": "googlecompute",
+      "project_id": "{{user `gcp_project_id`}}",
+      "source_image_family": "centos-stream-8",
+      "source_image_project_id": "centos-cloud",
+      "zone": "{{user `region`}}-b",
+      "disk_size": 20,
+      "machine_type": "{{user `machine_type`}}",
+      "image_name": "webapp-image-{{timestamp}}",
+      "image_family": "webapp-family",
+      "ssh_username": "{{user `ssh_username`}}"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "shell",
+      "inline": [
+        "sudo mkdir -p /var/webapp",
+        "sudo chown $(whoami):$(whoami) /var/webapp"
+      ]
+    },
+    {
+      "type": "file",
+      "source": "/Users/fish/code/webapp/",
+      "destination": "/var/webapp/"
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "sudo yum update -y",
+        "sudo yum install -y wget",
+        "wget https://dev.mysql.com/get/mysql80-community-release-el8-1.noarch.rpm",
+        "sudo rpm -ivh mysql80-community-release-el8-1.noarch.rpm",
+        "sudo yum install -y mysql-server",
+        "sudo systemctl start mysqld",
+        "sudo systemctl enable mysqld",
+        "curl -sL https://rpm.nodesource.com/setup_18.x | sudo bash -",
+        "sudo yum install -y nodejs",
+        "sudo npm install -g nodemon mocha",
+        "cd /var/webapp",
+        "npm install"
+      ]
+    }
+  ]
+}

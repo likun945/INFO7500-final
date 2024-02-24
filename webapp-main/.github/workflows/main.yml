@@ -1,0 +1,32 @@
+name: Packer Build
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  packer-build:
+    name: Build Packer
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      
+      - name: Setup Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v0.2.0
+        with:
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          project_id: csye-413919
+          export_default_credentials: true
+
+      - name: Install Packer
+        run: |
+          curl -o packer.zip https://releases.hashicorp.com/packer/1.7.8/packer_1.7.8_linux_amd64.zip
+          unzip packer.zip
+          sudo mv packer /usr/local/bin/
+      
+      - name: Build the Packer image
+        run: |
+          packer build ./packer-template.pkr.hcl
